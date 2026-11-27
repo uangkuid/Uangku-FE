@@ -1,0 +1,129 @@
+/* Maps the design tokens to Tailwind utilities, e.g. `bg-primary`, `text-body-large`, `rounded-14`. */
+
+/* Color roles. `inline` keeps utilities pointing at the variables in tokens.css, so themes switch. */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-inverse-primary: var(--inverse-primary);
+  --color-scrim: var(--scrim);
+  --color-success: var(--success);
+  --color-on-success: var(--on-success);
+  --color-success-container: var(--success-container);
+  --color-on-success-container: var(--on-success-container);
+  --color-warning: var(--warning);
+  --color-on-warning: var(--on-warning);
+  --color-warning-container: var(--warning-container);
+  --color-on-warning-container: var(--on-warning-container);
+  --color-info: var(--info);
+  --color-on-info: var(--on-info);
+  --color-info-container: var(--info-container);
+  --color-on-info-container: var(--on-info-container);
+  --color-logo-blue: var(--logo-blue);
+
+  --shadow-elevation-1: var(--elevation-1);
+}
+
+@theme {
+  --font-sans: 'Poppins', system-ui, sans-serif;
+  --font-display: 'Montserrat', 'Poppins', system-ui, sans-serif;
+
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-14: 14px;
+  --radius-16: 16px;
+  --radius-24: 24px;
+
+  /* Two-column layouts start at 900px. */
+  --breakpoint-split: 56.25rem;
+
+  /*
+   * Type scale. Each utility carries the base weight; for the design's "emphasized" style add
+   * `font-medium` or `font-semibold`. Display styles also need `font-display`.
+   */
+  --text-display-large: 57px;
+  --text-display-large--line-height: 64px;
+  --text-display-large--font-weight: 400;
+  --text-display-large--letter-spacing: -0.25px;
+  --text-display-medium: 45px;
+  --text-display-medium--line-height: 52px;
+  --text-display-medium--font-weight: 400;
+  --text-display-small: 36px;
+  --text-display-small--line-height: 44px;
+  --text-display-small--font-weight: 400;
+
+  --text-headline-large: 32px;
+  --text-headline-large--line-height: 40px;
+  --text-headline-large--font-weight: 400;
+  --text-headline-medium: 28px;
+  --text-headline-medium--line-height: 36px;
+  --text-headline-medium--font-weight: 400;
+  --text-headline-small: 24px;
+  --text-headline-small--line-height: 32px;
+  --text-headline-small--font-weight: 400;
+
+  --text-title-large: 22px;
+  --text-title-large--line-height: 28px;
+  --text-title-large--font-weight: 400;
+  --text-title-medium: 16px;
+  --text-title-medium--line-height: 24px;
+  --text-title-medium--font-weight: 500;
+  --text-title-medium--letter-spacing: 0.15px;
+  --text-title-small: 14px;
+  --text-title-small--line-height: 20px;
+  --text-title-small--font-weight: 500;
+  --text-title-small--letter-spacing: 0.1px;
+
+  --text-body-large: 16px;
+  --text-body-large--line-height: 24px;
+  --text-body-large--font-weight: 400;
+  --text-body-large--letter-spacing: 0.5px;
+  --text-body-medium: 14px;
+  --text-body-medium--line-height: 20px;
+  --text-body-medium--font-weight: 400;
+  --text-body-medium--letter-spacing: 0.25px;
+  --text-body-small: 12px;
+  --text-body-small--line-height: 16px;
+  --text-body-small--font-weight: 400;
+  --text-body-small--letter-spacing: 0.4px;
+
+  --text-label-large: 14px;
+  --text-label-large--line-height: 20px;
+  --text-label-large--font-weight: 500;
+  --text-label-large--letter-spacing: 0.1px;
+  --text-label-medium: 12px;
+  --text-label-medium--line-height: 16px;
+  --text-label-medium--font-weight: 500;
+  --text-label-medium--letter-spacing: 0.5px;
+  --text-label-small: 11px;
+  --text-label-small--line-height: 16px;
+  --text-label-small--font-weight: 500;
+  --text-label-small--letter-spacing: 0.5px;
+}
