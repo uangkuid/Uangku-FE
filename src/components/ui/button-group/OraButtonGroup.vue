@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="Value extends string">
-import { onRadioKeydown, radioTabindex } from './radioGroup'
+import { onRadioKeydown, radioTabindex } from '../shared/radioGroup'
 
 type Size = 's' | 'm'
 type Position = 'start' | 'middle' | 'end'

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useId } from 'vue'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import CategoryIcon from '@/components/ui/CategoryIcon.vue'
-import { onRadioKeydown, radioTabindex } from '@/components/ui/radioGroup'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
+import { onRadioKeydown, radioTabindex } from '@/components/ui/shared/radioGroup'
 import type { CategoryChoice } from './categories'
 
 const props = defineProps<{
@@ -34,7 +34,7 @@ function tabindex(index: number) {
   <div class="flex flex-col gap-2.5">
     <div class="flex items-center justify-between">
       <span :id="labelId" class="text-title-small font-semibold">Category</span>
-      <AppButton
+      <OraButton
         variant="text"
         class="-my-2 -mr-2 gap-0.5! pr-2! pl-3.5!"
         aria-haspopup="dialog"
@@ -43,7 +43,7 @@ function tabindex(index: number) {
       >
         More
         <IconChevronRight />
-      </AppButton>
+      </OraButton>
     </div>
     <div
       role="radiogroup"

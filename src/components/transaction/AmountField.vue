@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useId, useTemplateRef } from 'vue'
 import IconAlert from '@/components/icons/IconAlert.vue'
-import AppButton from '@/components/ui/AppButton.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
 import RollingNumber from './RollingNumber.vue'
 import type { TransactionType } from '@/data/newTransaction'
 import { formatDigits } from '@/utils/rupiah'
@@ -104,7 +104,7 @@ defineExpose({ focus: () => input.value?.focus({ preventScroll: true }) })
       {{ error }}
     </span>
     <div class="flex flex-wrap gap-2">
-      <AppButton
+      <OraButton
         v-for="quick in quickAmounts"
         :key="quick.value"
         variant="tonal"
@@ -112,7 +112,7 @@ defineExpose({ focus: () => input.value?.focus({ preventScroll: true }) })
         @click="add(quick.value)"
       >
         {{ quick.label }}
-      </AppButton>
+      </OraButton>
     </div>
   </div>
 </template>

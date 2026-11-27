@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import AppLinearProgress from '@/components/ui/AppLinearProgress.vue'
+import OraLinearProgress from '@/components/ui/linear-progress/OraLinearProgress.vue'
 
 const props = defineProps<{
   current: number
@@ -13,6 +13,6 @@ const text = computed(() => `Step ${props.current} of ${props.total}`)
 <template>
   <div class="flex flex-col gap-2">
     <span class="text-label-large text-on-surface-variant">{{ text }}</span>
-    <AppLinearProgress :value="current" :min="1" :max="total" :label="text" />
+    <OraLinearProgress :value="current" :min="1" :max="total" :label="text" />
   </div>
 </template>

@@ -2,10 +2,10 @@
 import { computed, nextTick, reactive, useId, useTemplateRef, watch } from 'vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
 import IconChevronDown from '@/components/icons/IconChevronDown.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import AppSheet from '@/components/ui/AppSheet.vue'
-import CategoryIcon from '@/components/ui/CategoryIcon.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import OraSheet from '@/components/ui/sheet/OraSheet.vue'
+import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
 import type { CategoryOption } from '@/data/newTransaction'
 import { categoryChoice } from './categories'
 
@@ -73,7 +73,7 @@ watch(
 
 <!-- The second level of the sheet stack: every category, with its subcategories. -->
 <template>
-  <AppSheet
+  <OraSheet
     :title-id="titleId"
     title="Category"
     :overline="`New transaction · ${typeName}`"
@@ -116,7 +116,7 @@ watch(
           <span class="min-w-0 flex-1 truncate">{{ row.name }}</span>
           <IconCheck v-if="row.key === selected" class="size-5 flex-none" />
         </button>
-        <AppIconButton
+        <OraIconButton
           v-if="row.expandable"
           :label="`${row.open ? 'Collapse' : 'Expand'} ${row.name}`"
           :aria-expanded="row.open"
@@ -126,22 +126,22 @@ watch(
             class="[transition:rotate_var(--motion-fast-spatial)]"
             :class="row.open && 'rotate-180'"
           />
-        </AppIconButton>
+        </OraIconButton>
         <span v-else aria-hidden="true" class="w-10 flex-none"></span>
       </li>
     </ul>
 
     <template #footer>
       <footer class="px-6 pt-4 pb-6">
-        <AppButton
+        <OraButton
           variant="outlined"
           size="m"
           class="w-full border-outline!"
           @click="emit('close')"
         >
           Cancel
-        </AppButton>
+        </OraButton>
       </footer>
     </template>
-  </AppSheet>
+  </OraSheet>
 </template>

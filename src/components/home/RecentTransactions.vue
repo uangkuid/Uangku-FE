@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppCard from '@/components/ui/AppCard.vue'
-import AppList from '@/components/ui/AppList.vue'
-import AppListItem from '@/components/ui/AppListItem.vue'
-import AppTag from '@/components/ui/AppTag.vue'
-import CategoryIcon from '@/components/ui/CategoryIcon.vue'
-import ComingSoonLink from '@/components/ui/ComingSoonLink.vue'
-import FamilyIcon from '@/components/ui/FamilyIcon.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraCard from '@/components/ui/card/OraCard.vue'
+import OraList from '@/components/ui/list/OraList.vue'
+import OraListItem from '@/components/ui/list/OraListItem.vue'
+import OraTag from '@/components/ui/tag/OraTag.vue'
+import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
+import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
+import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
 import type { Transaction } from '@/data/home'
 import { formatSignedRupiah } from '@/utils/rupiah'
 
@@ -15,24 +15,24 @@ defineProps<{ transactions: Transaction[] }>()
 </script>
 
 <template>
-  <AppCard class="gap-3.5 px-2 pt-6 pb-2 sm:px-4 sm:pb-4" aria-labelledby="recent-title">
+  <OraCard class="gap-3.5 px-2 pt-6 pb-2 sm:px-4 sm:pb-4" aria-labelledby="recent-title">
     <div class="flex flex-wrap items-center justify-between gap-3 px-2">
       <h2 id="recent-title" class="text-title-large font-medium">Recent transactions</h2>
-      <AppButton :as="ComingSoonLink" variant="tonal">
+      <OraButton :as="ComingSoonLink" variant="tonal">
         View all
         <IconChevronRight />
-      </AppButton>
+      </OraButton>
     </div>
 
-    <AppList>
-      <AppListItem v-for="(transaction, index) in transactions" :key="index" :as="ComingSoonLink">
+    <OraList>
+      <OraListItem v-for="(transaction, index) in transactions" :key="index" :as="ComingSoonLink">
         <template #leading>
           <CategoryIcon :category="transaction.category" />
         </template>
         <template #headline>{{ transaction.categoryName }}</template>
         <template #supporting>
           <span>{{ transaction.notes }} · {{ transaction.date }}</span>
-          <AppTag>{{ transaction.wallet }}</AppTag>
+          <OraTag>{{ transaction.wallet }}</OraTag>
           <FamilyIcon v-if="transaction.family" />
         </template>
         <template #trailing>
@@ -43,7 +43,7 @@ defineProps<{ transactions: Transaction[] }>()
             {{ formatSignedRupiah(transaction.amount) }}
           </span>
         </template>
-      </AppListItem>
-    </AppList>
-  </AppCard>
+      </OraListItem>
+    </OraList>
+  </OraCard>
 </template>

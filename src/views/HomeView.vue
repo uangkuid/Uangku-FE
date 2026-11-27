@@ -4,9 +4,9 @@ import MonthSummaryCard from '@/components/home/MonthSummaryCard.vue'
 import RecentTransactions from '@/components/home/RecentTransactions.vue'
 import TopSpending from '@/components/home/TopSpending.vue'
 import IconBell from '@/components/icons/IconBell.vue'
-import AppNavRail from '@/components/layout/AppNavRail.vue'
-import AppBadge from '@/components/ui/AppBadge.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
+import OraNavRail from '@/components/layout/OraNavRail.vue'
+import OraBadge from '@/components/ui/badge/OraBadge.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
 import { homeData } from '@/data/home'
 
 const { user, today, greeting, month } = homeData
@@ -14,7 +14,7 @@ const { user, today, greeting, month } = homeData
 
 <template>
   <div class="flex min-h-dvh">
-    <AppNavRail :user="user" />
+    <OraNavRail :user="user" />
 
     <main class="min-w-0 flex-1 px-4 pt-8 pb-14 sm:px-10">
       <div class="mx-auto flex max-w-310 flex-col gap-6">
@@ -29,10 +29,10 @@ const { user, today, greeting, month } = homeData
               {{ greeting }}, {{ user.name }}
             </h1>
           </div>
-          <AppIconButton label="Notifications" class="bg-surface-container-high">
+          <OraIconButton label="Notifications" class="bg-surface-container-high">
             <IconBell />
-            <AppBadge class="absolute top-2 right-2" />
-          </AppIconButton>
+            <OraBadge class="absolute top-2 right-2" />
+          </OraIconButton>
         </header>
 
         <div class="flex flex-wrap items-stretch gap-6">

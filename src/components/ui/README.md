@@ -21,28 +21,33 @@ may turn with `animate-shape-spin` (`assets/theme.css`); pair it with `motion-re
 
 ## Components
 
+Each component lives in a folder named after it in kebab-case, e.g.
+`@/components/ui/icon-button/OraIconButton.vue`. `OraList` and `OraListItem` share `list/`. Tests go
+in a `__tests__/` folder inside the component's folder, and helpers used by more than one component
+go in `shared/`. Prefix a new component with `Ora`.
+
 | Component                                 | M3 component                     | Main props                                                  |
 | ----------------------------------------- | -------------------------------- | ----------------------------------------------------------- |
-| `AppButton`                               | Buttons                          | `variant`, `size` xs–xl, `shape`, `selected`, `as`          |
-| `AppButtonGroup`                          | Connected button group           | `options`, `selected`, `selection`, `size` s/m, `fill`      |
-| `AppSplitButton`                          | Split button (filled, medium)    | `label`, `menuLabel`, `items`                               |
-| `AppIconButton`                           | Icon buttons                     | `label`, `variant`, `size`, `width`, `selected`             |
-| `AppFab`                                  | FAB, extended FAB                | `label`, `size`, `color`, `extended`                        |
-| `AppChip`                                 | Chips (filter)                   | `selected`                                                  |
-| `AppTextField`                            | Text fields (outlined)           | `label`, `error`, `supportingText`, `readonly`              |
-| `AppTextArea`                             | Text fields (filled, multi-line) | `label`, `rows`                                             |
-| `AppCard`                                 | Cards                            | `variant`                                                   |
-| `AppList`, `AppListItem`                  | Lists (expressive, segmented)    | `as`; slots `leading`, `headline`, `supporting`, `trailing` |
-| `AppSheet`                                | Side sheets (modal, detached)    | `title`, `overline`, `titleId`, `covered`                   |
-| `AppSnackbar`                             | Snackbar                         | `action`; slot `icon`                                       |
-| `AppNavRailItem`                          | Navigation rail                  | `label`, `icon`, `expanded`                                 |
-| `AppLinearProgress`                       | Linear progress                  | `value`, `label`, `thickness`                               |
-| `AppCircularProgress`                     | Circular progress                | `value`, `label`, `size`, `thickness`                       |
-| `AppBadge`                                | Badges                           | `label`                                                     |
-| `AppDivider`                              | Divider                          | `vertical`; text in the slot                                |
-| `AppTag`                                  | — (Uangku)                       | `color`, `size`                                             |
-| `AppBanner`                               | — (Uangku)                       | `tone`                                                      |
-| `AppAvatar`, `CategoryIcon`, `FamilyIcon` | — (Uangku)                       |                                                             |
+| `OraButton`                               | Buttons                          | `variant`, `size` xs–xl, `shape`, `selected`, `as`          |
+| `OraButtonGroup`                          | Connected button group           | `options`, `selected`, `selection`, `size` s/m, `fill`      |
+| `OraSplitButton`                          | Split button (filled, medium)    | `label`, `menuLabel`, `items`                               |
+| `OraIconButton`                           | Icon buttons                     | `label`, `variant`, `size`, `width`, `selected`             |
+| `OraFab`                                  | FAB, extended FAB                | `label`, `size`, `color`, `extended`                        |
+| `OraChip`                                 | Chips (filter)                   | `selected`                                                  |
+| `OraTextField`                            | Text fields (outlined)           | `label`, `error`, `supportingText`, `readonly`              |
+| `OraTextArea`                             | Text fields (filled, multi-line) | `label`, `rows`                                             |
+| `OraCard`                                 | Cards                            | `variant`                                                   |
+| `OraList`, `OraListItem`                  | Lists (expressive, segmented)    | `as`; slots `leading`, `headline`, `supporting`, `trailing` |
+| `OraSheet`                                | Side sheets (modal, detached)    | `title`, `overline`, `titleId`, `covered`                   |
+| `OraSnackbar`                             | Snackbar                         | `action`; slot `icon`                                       |
+| `OraNavRailItem`                          | Navigation rail                  | `label`, `icon`, `expanded`                                 |
+| `OraLinearProgress`                       | Linear progress                  | `value`, `label`, `thickness`                               |
+| `OraCircularProgress`                     | Circular progress                | `value`, `label`, `size`, `thickness`                       |
+| `OraBadge`                                | Badges                           | `label`                                                     |
+| `OraDivider`                              | Divider                          | `vertical`; text in the slot                                |
+| `OraTag`                                  | — (Uangku)                       | `color`, `size`                                             |
+| `OraBanner`                               | — (Uangku)                       | `tone`                                                      |
+| `OraAvatar`, `CategoryIcon`, `FamilyIcon` | — (Uangku)                       |                                                             |
 
 Components that can be a link take `as`: pass `RouterLink` with `to`, or `ComingSoonLink` for a
 screen that is not built yet. Colors that a variant does not offer are set with an important

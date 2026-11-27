@@ -10,13 +10,13 @@ import CategoryGrid from '@/components/transaction/CategoryGrid.vue'
 import CategorySheet from '@/components/transaction/CategorySheet.vue'
 import DatePicker from '@/components/transaction/DatePicker.vue'
 import WalletPicker from '@/components/transaction/WalletPicker.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppButtonGroup from '@/components/ui/AppButtonGroup.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import AppSheet from '@/components/ui/AppSheet.vue'
-import AppSnackbar from '@/components/ui/AppSnackbar.vue'
-import AppSplitButton from '@/components/ui/AppSplitButton.vue'
-import AppTextArea from '@/components/ui/AppTextArea.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraButtonGroup from '@/components/ui/button-group/OraButtonGroup.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import OraSheet from '@/components/ui/sheet/OraSheet.vue'
+import OraSnackbar from '@/components/ui/snackbar/OraSnackbar.vue'
+import OraSplitButton from '@/components/ui/split-button/OraSplitButton.vue'
+import OraTextArea from '@/components/ui/text-area/OraTextArea.vue'
 import { homeData } from '@/data/home'
 import { newTransactionData, type TransactionType } from '@/data/newTransaction'
 import { addDays, formatDayMonth, formatWeekday, type IsoDate } from '@/utils/date'
@@ -185,7 +185,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       @click="onScrimClick"
     ></div>
 
-    <AppSheet
+    <OraSheet
       :title-id="titleId"
       title="New transaction"
       overline="Transactions"
@@ -195,18 +195,18 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       @uncover="categoriesOpen = false"
     >
       <template #action>
-        <AppIconButton
+        <OraIconButton
           :as="RouterLink"
           :to="{ name: 'home' }"
           label="Close"
           class="bg-surface-container-high text-on-surface!"
         >
           <IconClose />
-        </AppIconButton>
+        </OraIconButton>
       </template>
 
       <form class="flex flex-col gap-5.5 px-6 pt-2 pb-6" novalidate @submit.prevent="save">
-        <AppButtonGroup
+        <OraButtonGroup
           label="Transaction type"
           size="m"
           fill
@@ -219,7 +219,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
               {{ types.find((item) => item.value === option.value)?.glyph }}
             </span>
           </template>
-        </AppButtonGroup>
+        </OraButtonGroup>
 
         <AmountField
           ref="amountField"
@@ -258,7 +258,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
         <div ref="dateSection" class="flex flex-col gap-2.5">
           <span class="text-title-small font-semibold">Date</span>
-          <AppButtonGroup
+          <OraButtonGroup
             label="Date"
             selection="toggle"
             :options="dateOptions"
@@ -277,7 +277,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           />
         </div>
 
-        <AppTextArea
+        <OraTextArea
           :id="notesId"
           v-model="notes"
           label="Notes (optional)"
@@ -294,7 +294,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         <footer
           class="relative flex items-center justify-between gap-3 bg-surface-container px-6 pt-4 pb-6"
         >
-          <AppSnackbar
+          <OraSnackbar
             v-if="savedMessage"
             action="Undo"
             class="absolute inset-x-6 bottom-full"
@@ -302,8 +302,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           >
             <template #icon><IconCheck /></template>
             {{ savedMessage }}
-          </AppSnackbar>
-          <AppButton
+          </OraSnackbar>
+          <OraButton
             :as="RouterLink"
             :to="{ name: 'home' }"
             variant="text"
@@ -311,8 +311,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
             class="text-error!"
           >
             Cancel
-          </AppButton>
-          <AppSplitButton
+          </OraButton>
+          <OraSplitButton
             label="Save"
             menu-label="More save options"
             :items="saveOptions"
@@ -320,10 +320,10 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
             @select="save"
           >
             <template #icon><IconCheck /></template>
-          </AppSplitButton>
+          </OraSplitButton>
         </footer>
       </template>
-    </AppSheet>
+    </OraSheet>
 
     <CategorySheet
       :open="categoriesOpen"

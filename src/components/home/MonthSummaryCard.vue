@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import AppCard from '@/components/ui/AppCard.vue'
-import AppCircularProgress from '@/components/ui/AppCircularProgress.vue'
+import OraCard from '@/components/ui/card/OraCard.vue'
+import OraCircularProgress from '@/components/ui/circular-progress/OraCircularProgress.vue'
 import { formatRupiah } from '@/utils/rupiah'
 
 const props = defineProps<{
@@ -15,7 +15,7 @@ const percentText = computed(() => `${props.spentPercent.toLocaleString('id-ID')
 </script>
 
 <template>
-  <AppCard variant="tertiary" class="gap-4.5 p-5 sm:p-7" aria-labelledby="month-title">
+  <OraCard variant="tertiary" class="gap-4.5 p-5 sm:p-7" aria-labelledby="month-title">
     <div class="flex flex-col gap-1">
       <h2 id="month-title" class="text-title-medium font-semibold">{{ month }} so far</h2>
       <p class="text-body-medium">Income and spending this month.</p>
@@ -37,7 +37,7 @@ const percentText = computed(() => `${props.spentPercent.toLocaleString('id-ID')
         </div>
       </dl>
 
-      <AppCircularProgress
+      <OraCircularProgress
         :value="spentPercent"
         :label="`${percentText} of income spent`"
         :size="136"
@@ -48,7 +48,7 @@ const percentText = computed(() => `${props.spentPercent.toLocaleString('id-ID')
       >
         <span class="font-display text-[20px] leading-6.5 font-bold">{{ percentText }}</span>
         <span class="text-[11px] leading-3.5">spent</span>
-      </AppCircularProgress>
+      </OraCircularProgress>
     </div>
 
     <div
@@ -59,5 +59,5 @@ const percentText = computed(() => `${props.spentPercent.toLocaleString('id-ID')
         {{ formatRupiah(income - spending) }}
       </span>
     </div>
-  </AppCard>
+  </OraCard>
 </template>

@@ -36,8 +36,8 @@ Run `npx playwright install` before the first e2e run. Unit tests live in `__tes
 - `src/router/index.ts`: routes are lazy-loaded views. Home is at `/`, not `/home`. Login is at `/login`. A sheet over a page, such as `/transactions/new`, is a route with a named `sheet` view and `meta.sheet`, which makes the page behind it inert. `App.vue` keeps a leaving sheet on screen for its exit animation, styled with the `sheet-leaving:` variant.
 - `src/views/`: one view per screen. A view composes feature components and gets its data from `src/data/*`.
 - `src/components/` is grouped by purpose:
-  - `ui/`: the design system (`AppButton`, `AppIconButton`, `AppTextField`, `AppCard`, `AppList`, ...). Check `ui/README.md` before writing new UI.
-  - `layout/`: app chrome such as `AppNavRail`.
+  - `ui/`: the design system (`OraButton`, `OraIconButton`, `OraTextField`, `OraCard`, `OraList`, ...). Each component has its own kebab-case folder (`ui/button/OraButton.vue`), with its tests in a `__tests__/` folder inside it; helpers used by more than one component are in `ui/shared/`. Design system components take the `Ora` prefix, never `App`. Check `ui/README.md` before writing new UI.
+  - `layout/`: app chrome such as `OraNavRail`.
   - `auth/`, `home/`, `transaction/`: components for one screen each.
   - `icons/`: one SVG component per icon (`IconXxx.vue`).
 - `ComingSoonLink` is a placeholder for links to screens that don't exist yet. When you add a screen's route, replace the placeholders that point to it with `RouterLink`.

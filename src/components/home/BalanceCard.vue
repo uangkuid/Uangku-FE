@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import IconEye from '@/components/icons/IconEye.vue'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppCard from '@/components/ui/AppCard.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import AppTag from '@/components/ui/AppTag.vue'
-import ComingSoonLink from '@/components/ui/ComingSoonLink.vue'
-import FamilyIcon from '@/components/ui/FamilyIcon.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraCard from '@/components/ui/card/OraCard.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import OraTag from '@/components/ui/tag/OraTag.vue'
+import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
+import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
 import type { Wallet } from '@/data/home'
 import { formatRupiah } from '@/utils/rupiah'
 
@@ -24,7 +24,7 @@ const hidden = ref(false)
 </script>
 
 <template>
-  <AppCard
+  <OraCard
     variant="primary"
     class="relative gap-6 overflow-hidden p-5 sm:p-7"
     aria-labelledby="balance-title"
@@ -50,18 +50,18 @@ const hidden = ref(false)
         >
           {{ hidden ? 'Rp ••••••••' : formatRupiah(total) }}
         </span>
-        <AppIconButton
+        <OraIconButton
           :label="hidden ? 'Show balance' : 'Hide balance'"
           :selected="hidden"
           class="bg-on-primary-container text-on-primary!"
           @click="hidden = !hidden"
         >
           <IconEye stroke-width="1.8" :off="!hidden" />
-        </AppIconButton>
+        </OraIconButton>
       </div>
-      <AppTag color="primary" size="m" class="self-start">
+      <OraTag color="primary" size="m" class="self-start">
         +{{ formatRupiah(monthlyChange) }} this month
-      </AppTag>
+      </OraTag>
     </div>
 
     <div
@@ -80,13 +80,13 @@ const hidden = ref(false)
           {{ hidden ? 'Rp ••••••' : formatRupiah(wallet.balance) }}
         </span>
       </ComingSoonLink>
-      <AppButton
+      <OraButton
         :as="ComingSoonLink"
         class="col-span-full mt-1 justify-self-start bg-on-primary-container! text-on-primary!"
       >
         All {{ walletCount }} wallets
         <IconChevronRight />
-      </AppButton>
+      </OraButton>
     </div>
-  </AppCard>
+  </OraCard>
 </template>

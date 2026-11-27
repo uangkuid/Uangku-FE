@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppButton from './AppButton.vue'
+import OraButton from '../button/OraButton.vue'
 
 defineProps<{
   /** Label of the action button. */
@@ -19,13 +19,13 @@ defineEmits<{ action: [] }>()
       <slot name="icon" />
     </span>
     <span class="min-w-0 flex-1 py-1.5 text-body-medium"><slot /></span>
-    <AppButton
+    <OraButton
       v-if="action"
       variant="text"
       class="font-bold text-inverse-primary!"
       @click="$emit('action')"
     >
       {{ action }}
-    </AppButton>
+    </OraButton>
   </div>
 </template>
