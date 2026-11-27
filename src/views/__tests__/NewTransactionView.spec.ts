@@ -47,6 +47,42 @@ describe('NewTransactionView', () => {
     expect(amount(wrapper).element.value).toBe('125.000')
   })
 
+  it('rolls the digits that a quick amount changes, then shows the field again', async () => {
+    vi.useFakeTimers()
+    const wrapper = mountForm()
+    await amount(wrapper).setValue('680000')
+
+    await button(wrapper, '+50rb').trigger('click')
+
+    // The value is set at once. Only the digits that change turn: 6 up to 7, and 8 down to 3.
+    expect(amount(wrapper).element.value).toBe('730.000')
+    const reels = wrapper.findAll('[data-testid="reel"]')
+    expect(reels.map((reel) => reel.attributes('data-direction'))).toEqual(['up', 'down'])
+    expect(amount(wrapper).classes()).toContain('text-transparent')
+
+    // Each strip runs from the old digit to the new one, with one more to overshoot into.
+    // An upward strip starts at its top; a downward one starts at its bottom.
+    const [growing = '', shrinking = ''] = reels.map((reel) => reel.text().replace(/\s/g, ''))
+    expect([growing[0], growing[growing.length - 2]]).toEqual(['6', '7'])
+    expect([shrinking[shrinking.length - 1], shrinking[1]]).toEqual(['8', '3'])
+
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(wrapper.find('[data-testid="reel"]').exists()).toBe(false)
+    expect(amount(wrapper).classes()).not.toContain('text-transparent')
+    vi.useRealTimers()
+  })
+
+  it('stops the roll as soon as the amount is typed', async () => {
+    const wrapper = mountForm()
+    await button(wrapper, '+50rb').trigger('click')
+    expect(wrapper.find('[data-testid="reel"]').exists()).toBe(true)
+
+    await amount(wrapper).setValue('7000')
+
+    expect(wrapper.find('[data-testid="reel"]').exists()).toBe(false)
+    expect(amount(wrapper).classes()).not.toContain('text-transparent')
+  })
+
   it('asks for an amount and a category before saving', async () => {
     const wrapper = mountForm()
     expect(alerts(wrapper)).toEqual([])
