@@ -9,6 +9,16 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
+      // A sheet over the home page. Move it over Transactions once that screen exists.
+      path: '/transactions/new',
+      name: 'transaction-new',
+      components: {
+        default: () => import('../views/HomeView.vue'),
+        sheet: () => import('../views/NewTransactionView.vue'),
+      },
+      meta: { sheet: true },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),

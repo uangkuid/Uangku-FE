@@ -3,7 +3,29 @@
  * module with real requests once it exists.
  */
 
-export type Category = 'salary' | 'investment' | 'other-income' | 'transportation' | 'food'
+export type Category =
+  | 'salary'
+  | 'investment'
+  | 'bonus'
+  | 'other-income'
+  | 'food'
+  | 'transportation'
+  | 'shopping'
+  | 'bills'
+  | 'entertainment'
+  | 'health'
+  | 'education'
+  | 'others'
+  | 'telecommunication'
+  | 'meals'
+  | 'clothes'
+  | 'beauty'
+  | 'vacation'
+  | 'pet'
+  | 'sport'
+  | 'technology'
+  | 'insurance'
+  | 'donation'
 
 export interface Wallet {
   name: string

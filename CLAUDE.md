@@ -33,15 +33,15 @@ Run `npx playwright install` before the first e2e run. Unit tests live in `__tes
 
 ## Architecture
 
-- `src/router/index.ts`: routes are lazy-loaded views. Home is at `/`, not `/home`. Login is at `/login`.
+- `src/router/index.ts`: routes are lazy-loaded views. Home is at `/`, not `/home`. Login is at `/login`. A sheet over a page, such as `/transactions/new`, is a route with a named `sheet` view and `meta.sheet`, which makes the page behind it inert. `App.vue` keeps a leaving sheet on screen for its exit animation, styled with the `sheet-leaving:` variant.
 - `src/views/`: one view per screen. A view composes feature components and gets its data from `src/data/*`.
 - `src/components/` is grouped by purpose:
   - `ui/`: the design system (`AppButton`, `AppIconButton`, `AppTextField`, `AppCard`, `AppList`, ...). Check `ui/README.md` before writing new UI.
   - `layout/`: app chrome such as `AppNavRail`.
-  - `auth/`, `home/`: components for one screen each.
+  - `auth/`, `home/`, `transaction/`: components for one screen each.
   - `icons/`: one SVG component per icon (`IconXxx.vue`).
 - `ComingSoonLink` is a placeholder for links to screens that don't exist yet. When you add a screen's route, replace the placeholders that point to it with `RouterLink`.
-- `src/data/home.ts` holds the prototype data and the shared domain types (`Category`, `Wallet`, `Transaction`). Replace it with real requests once the API exists.
+- `src/data/home.ts` holds the prototype data and the shared domain types (`Category`, `Wallet`, `Transaction`); `src/data/newTransaction.ts` holds the form's options. Replace them with real requests once the API exists.
 - `src/utils/rupiah.ts` formats money (`formatRupiah`, `formatSignedRupiah`). Use it for every amount.
 
 ## Styling

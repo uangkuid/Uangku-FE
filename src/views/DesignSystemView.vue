@@ -11,7 +11,9 @@ import AppAvatar from '@/components/ui/AppAvatar.vue'
 import AppBadge from '@/components/ui/AppBadge.vue'
 import AppBanner from '@/components/ui/AppBanner.vue'
 import AppButton from '@/components/ui/AppButton.vue'
+import AppButtonGroup from '@/components/ui/AppButtonGroup.vue'
 import AppCard from '@/components/ui/AppCard.vue'
+import AppChip from '@/components/ui/AppChip.vue'
 import AppCircularProgress from '@/components/ui/AppCircularProgress.vue'
 import AppDivider from '@/components/ui/AppDivider.vue'
 import AppFab from '@/components/ui/AppFab.vue'
@@ -20,7 +22,11 @@ import AppLinearProgress from '@/components/ui/AppLinearProgress.vue'
 import AppList from '@/components/ui/AppList.vue'
 import AppListItem from '@/components/ui/AppListItem.vue'
 import AppNavRailItem from '@/components/ui/AppNavRailItem.vue'
+import AppSheet from '@/components/ui/AppSheet.vue'
+import AppSnackbar from '@/components/ui/AppSnackbar.vue'
+import AppSplitButton from '@/components/ui/AppSplitButton.vue'
 import AppTag from '@/components/ui/AppTag.vue'
+import AppTextArea from '@/components/ui/AppTextArea.vue'
 import AppTextField from '@/components/ui/AppTextField.vue'
 import CategoryIcon from '@/components/ui/CategoryIcon.vue'
 import FamilyIcon from '@/components/ui/FamilyIcon.vue'
@@ -92,6 +98,13 @@ const selected = ref(false)
 const text = ref('')
 const progress = ref(40)
 const current = ref('Home')
+const period = ref('week')
+const periods = [
+  { value: 'day', label: 'Day' },
+  { value: 'week', label: 'Week' },
+  { value: 'month', label: 'Month' },
+]
+const notes = ref('')
 </script>
 
 <template>
@@ -205,6 +218,36 @@ const current = ref('Home')
       </div>
     </AppCard>
 
+    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-group">
+      <h2 id="ds-group" class="text-title-large font-medium">
+        Button groups, chips and split button
+      </h2>
+      <AppButtonGroup
+        label="Period"
+        size="m"
+        fill
+        :options="periods"
+        :selected="period"
+        @select="period = $event"
+      />
+      <AppButtonGroup
+        label="Compact period"
+        selection="toggle"
+        :options="periods"
+        :selected="period"
+        @select="period = $event"
+      />
+      <div class="flex flex-wrap items-center gap-3">
+        <AppChip :selected="selected" @click="selected = !selected">Filter chip</AppChip>
+        <AppChip :selected="!selected" @click="selected = !selected">Other chip</AppChip>
+        <AppSplitButton
+          label="Save"
+          menu-label="More save options"
+          :items="[{ value: 'another', label: 'Save & add another' }]"
+        />
+      </div>
+    </AppCard>
+
     <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-fab">
       <h2 id="ds-fab" class="text-title-large font-medium">FAB and extended FAB</h2>
       <div class="flex flex-wrap items-center gap-4">
@@ -232,6 +275,7 @@ const current = ref('Home')
         <AppTextField id="ds-readonly" model-value="Read only" label="Read only" readonly />
         <AppTextField id="ds-disabled" model-value="Disabled" label="Disabled" disabled />
       </div>
+      <AppTextArea id="ds-notes" v-model="notes" label="Notes" placeholder="Multi-line text" />
     </AppCard>
 
     <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-card">
@@ -319,6 +363,26 @@ const current = ref('Home')
       <AppDivider />
       <AppDivider>OR</AppDivider>
       <AppBanner v-for="tone in tones" :key="tone" :tone="tone">{{ tone }} message</AppBanner>
+    </AppCard>
+
+    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-sheet">
+      <h2 id="ds-sheet" class="text-title-large font-medium">Side sheet and snackbar</h2>
+      <div class="relative h-80 overflow-hidden rounded-corner-lg bg-surface-dim">
+        <AppSheet
+          title-id="ds-sheet-example"
+          title="Sheet title"
+          overline="Overline"
+          aria-modal="false"
+          class="w-[min(420px,calc(100%-32px))]"
+        >
+          <p class="px-7 text-body-medium">The body of the sheet scrolls.</p>
+          <template #footer>
+            <footer class="p-4">
+              <AppSnackbar action="Undo">Transaction saved</AppSnackbar>
+            </footer>
+          </template>
+        </AppSheet>
+      </div>
     </AppCard>
   </main>
 </template>

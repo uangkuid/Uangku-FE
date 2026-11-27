@@ -11,7 +11,13 @@ defineProps<{ category: Category }>()
     class="flex size-7 flex-none rounded-corner-md bg-category-container p-1 text-on-category-container"
   >
     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path :d="categoryIcons[category].path" :transform="categoryIcons[category].transform" />
+      <path
+        v-for="(path, index) in categoryIcons[category]"
+        :key="index"
+        :d="path.d"
+        :transform="path.transform"
+        :fill-rule="path.evenOdd ? 'evenodd' : undefined"
+      />
     </svg>
   </span>
 </template>

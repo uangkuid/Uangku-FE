@@ -69,7 +69,8 @@ const expanded = ref(false)
     </div>
 
     <AppFab
-      :as="ComingSoonLink"
+      :as="RouterLink"
+      :to="{ name: 'transaction-new' }"
       label="New transaction"
       :extended="expanded"
       class="mt-1 mb-4"
