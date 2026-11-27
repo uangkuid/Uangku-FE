@@ -81,6 +81,36 @@
   --breakpoint-split: 56.25rem;
 
   /*
+   * Ambient spin of a decorative shape, after the M3 Expressive loading indicator: a drift that
+   * never stops, plus a springy 45° step every 4s that overshoots and settles. The step starts from
+   * rest, unlike the `--motion-*` springs, so it never jerks out of the drift. It loops at 90°, so
+   * the shape needs quarter-turn symmetry.
+   */
+  --animate-shape-spin: shape-drift 40s linear infinite, shape-step 8s infinite;
+
+  @keyframes shape-drift {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes shape-step {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1.25);
+    }
+    20%,
+    50% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1.25);
+    }
+    70%,
+    100% {
+      transform: rotate(90deg);
+    }
+  }
+
+  /*
    * Type scale. Each utility carries the base weight; for the design's "emphasized" style add
    * `font-medium` or `font-semibold`. Display styles also need `font-display`.
    */

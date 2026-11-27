@@ -16,7 +16,8 @@ open `/design-system` to see every token and component, in light and dark.
 | Interaction | `assets/main.css`   | `transition-morph`, `focus-ring`, `touch-target` |
 
 Motion uses the expressive scheme: _spatial_ springs for size, position and shape, _effects_ springs
-for color and opacity. All of them become instant under `prefers-reduced-motion`.
+for color and opacity. All of them become instant under `prefers-reduced-motion`. Decorative shapes
+may turn with `animate-shape-spin` (`assets/theme.css`); pair it with `motion-reduce:animate-none`.
 
 ## Components
 

@@ -29,8 +29,9 @@ const hidden = ref(false)
     class="relative gap-6 overflow-hidden p-5 sm:p-7"
     aria-labelledby="balance-title"
   >
+    <!-- The origin is the middle of the path, which sits above the middle of the view box. -->
     <svg
-      class="absolute -top-27.5 -right-22.5 size-80 opacity-18"
+      class="absolute -top-27.5 -right-22.5 size-80 origin-[50%_43%] animate-shape-spin opacity-18 motion-reduce:animate-none"
       viewBox="0 0 100 100"
       fill="currentColor"
       aria-hidden="true"
