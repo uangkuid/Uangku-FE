@@ -1,7 +1,19 @@
-import { describe, it, expect } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import LoginView from '../LoginView.vue'
+
+const push = vi.fn<(to: unknown) => void>()
+
+vi.mock('vue-router', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('vue-router')>()),
+  useRouter: () => ({ push }),
+}))
+
+afterEach(() => {
+  vi.useRealTimers()
+  push.mockClear()
+})
 
 function mountLogin() {
   return mount(LoginView, { global: { stubs: { RouterLink: RouterLinkStub } } })
@@ -48,6 +60,32 @@ describe('LoginView', () => {
     await wrapper.get('#secret-key').setValue('example-key')
     await wrapper.get('form').trigger('submit')
     expect(wrapper.find('[role="status"]').exists()).toBe(true)
+  })
+
+  it('opens the home page shortly after unlocking', async () => {
+    const wrapper = await goToUnlockStep()
+    await wrapper.get('#password').setValue('example-password')
+    await wrapper.get('#secret-key').setValue('example-key')
+    vi.useFakeTimers()
+
+    await wrapper.get('form').trigger('submit')
+    expect(push).not.toHaveBeenCalled()
+
+    vi.runAllTimers()
+    expect(push).toHaveBeenCalledExactlyOnceWith({ name: 'home' })
+  })
+
+  it('stays on the login page when a credential changes before it opens', async () => {
+    const wrapper = await goToUnlockStep()
+    await wrapper.get('#password').setValue('example-password')
+    await wrapper.get('#secret-key').setValue('example-key')
+    vi.useFakeTimers()
+
+    await wrapper.get('form').trigger('submit')
+    await wrapper.get('#password').setValue('another-password')
+
+    vi.runAllTimers()
+    expect(push).not.toHaveBeenCalled()
   })
 
   it('toggles password visibility', async () => {

@@ -36,7 +36,7 @@ Run `npx playwright install` before the first e2e run. Unit tests live in `__tes
 - `src/router/index.ts`: routes are lazy-loaded views. Home is at `/`, not `/home`. Login is at `/login`.
 - `src/views/`: one view per screen. A view composes feature components and gets its data from `src/data/*`.
 - `src/components/` is grouped by purpose:
-  - `ui/`: shared building blocks (`AppButton` with variants, `AppTextField`, `PillLink`, `AppAvatar`, `CategoryIcon`).
+  - `ui/`: the design system (`AppButton`, `AppIconButton`, `AppTextField`, `AppCard`, `AppList`, ...). Check `ui/README.md` before writing new UI.
   - `layout/`: app chrome such as `AppNavRail`.
   - `auth/`, `home/`: components for one screen each.
   - `icons/`: one SVG component per icon (`IconXxx.vue`).
@@ -48,10 +48,12 @@ Run `npx playwright install` before the first e2e run. Unit tests live in `__tes
 
 Use Tailwind utility classes only. Don't add `<style scoped>` blocks.
 
-The design system has three layers, all imported by `src/assets/main.css`:
+The design system follows Material 3 Expressive (m3.material.io). Its components are in `src/components/ui/`, and `/design-system` shows them all in light and dark. Where the design canvas and M3 disagree, component structure, button sizes, states, shape morph and motion follow M3, while the canvas's shapes stay as the Uangku theme. Record such departures in `src/components/ui/README.md`.
 
-1. `tokens.css` defines the color roles as CSS variables, Material 3 style (`--primary`, `--surface-container-high`, ...), for light and dark themes through `[data-theme]`.
-2. `theme.css` maps those variables into Tailwind's `@theme`. That provides `bg-primary`, `text-on-surface-variant`, the type scale (`text-display-small`, `text-headline-medium`, `text-title-medium`, `text-body-large`, ...), radii (`rounded-14`, `rounded-24`), the `split` breakpoint, and the fonts (`font-sans` is Poppins, `font-display` is Montserrat).
-3. `main.css` adds the `dark:` variant, which follows `data-theme='dark'` rather than the OS setting, plus the custom utilities `state-layer` (hover and press feedback) and `focus-ring`.
+Its styles have three layers, all imported by `src/assets/main.css`:
+
+1. `tokens.css` defines the color roles as CSS variables, Material 3 style (`--primary`, `--surface-container-high`, ...), for light and dark themes through `[data-theme]`, plus elevation, state layer opacities and the motion springs (`--motion-fast-spatial`, `--motion-default-effects`, ...).
+2. `theme.css` maps those variables into Tailwind's `@theme`. That provides `bg-primary`, `text-on-surface-variant`, the type scale (`text-display-small`, `text-headline-medium`, `text-title-medium`, `text-body-large`, ...), the M3 shape scale (`rounded-corner-xs` to `rounded-corner-xxl`), component shapes (`rounded-card`, `rounded-field`), the `split` breakpoint, and the fonts (`font-sans` is Poppins, `font-display` is Montserrat).
+3. `main.css` adds the `dark:` variant, which follows `data-theme='dark'` rather than the OS setting, plus the custom utilities `state-layer` (hover, focus and press feedback), `transition-morph`, `touch-target` and `focus-ring`.
 
 Design artboards use DS class names such as `headline-medium-emphasized`. Translate them to these utilities, for example `text-headline-medium font-medium`, and avoid raw hex values.
