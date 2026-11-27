@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
 import IconFamily from '@/components/icons/IconFamily.vue'
-import AppChip from '@/components/ui/AppChip.vue'
-import FamilyIcon from '@/components/ui/FamilyIcon.vue'
+import OraChip from '@/components/ui/chip/OraChip.vue'
+import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
 import type { Wallet } from '@/data/home'
 
 const props = defineProps<{
@@ -25,7 +25,7 @@ const shared = computed(() =>
   <div class="flex flex-col gap-2.5">
     <span :id="labelId" class="text-title-small font-semibold">{{ label }}</span>
     <div role="group" :aria-labelledby="labelId" class="flex flex-wrap gap-2">
-      <AppChip
+      <OraChip
         v-for="wallet in wallets"
         :key="wallet.name"
         :selected="wallet.name === picked"
@@ -33,7 +33,7 @@ const shared = computed(() =>
       >
         {{ wallet.name }}
         <FamilyIcon v-if="wallet.family" />
-      </AppChip>
+      </OraChip>
     </div>
     <span
       v-if="familyName && shared"

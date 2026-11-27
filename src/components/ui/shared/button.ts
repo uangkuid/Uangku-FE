@@ -1,4 +1,4 @@
-/* Sizes and shapes shared by AppButton and AppIconButton (M3 Expressive). */
+/* Sizes and shapes shared by OraButton and OraIconButton (M3 Expressive). */
 
 export type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 export type ButtonShape = 'round' | 'square'

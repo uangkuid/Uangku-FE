@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, useId, useTemplateRef, watch } from 'vue'
 import IconChevronDown from '@/components/icons/IconChevronDown.vue'
-import { useDismissOnOutsidePress } from './dismissOnOutsidePress'
+import { useDismissOnOutsidePress } from '../shared/dismissOnOutsidePress'
 
 defineProps<{
   label: string

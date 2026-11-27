@@ -3,10 +3,10 @@ import { computed, nextTick, onMounted, ref, useId, useTemplateRef, watch } from
 import IconChevronDown from '@/components/icons/IconChevronDown.vue'
 import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import { useDismissOnOutsidePress } from '@/components/ui/dismissOnOutsidePress'
-import { onRadioKeydown, radioTabindex } from '@/components/ui/radioGroup'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import { useDismissOnOutsidePress } from '@/components/ui/shared/dismissOnOutsidePress'
+import { onRadioKeydown, radioTabindex } from '@/components/ui/shared/radioGroup'
 import type { DayActivity } from '@/data/newTransaction'
 import {
   addDays,
@@ -170,7 +170,7 @@ onMounted(() => {
     <div class="flex items-center gap-2 px-1">
       <h3 :id="titleId" class="min-w-0 flex-1 text-title-large font-medium">Select date</h3>
       <div ref="yearField" class="relative" @focusout="onYearsFocusout">
-        <AppButton
+        <OraButton
           variant="tonal"
           class="gap-1! bg-surface-container-high! pr-2.5! pl-3.5! text-on-surface!"
           aria-haspopup="listbox"
@@ -180,7 +180,7 @@ onMounted(() => {
         >
           {{ view.year }}
           <IconChevronDown :class="yearsOpen && 'rotate-180'" />
-        </AppButton>
+        </OraButton>
         <div
           v-if="yearsOpen"
           role="listbox"
@@ -209,9 +209,9 @@ onMounted(() => {
     </div>
 
     <div class="flex items-center gap-1">
-      <AppIconButton label="Previous month" @click="show(view.year, view.month - 1)">
+      <OraIconButton label="Previous month" @click="show(view.year, view.month - 1)">
         <IconChevronLeft class="size-5.5!" />
-      </AppIconButton>
+      </OraIconButton>
       <!-- Scrolls sideways and fades at both ends. The vertical padding leaves room for focus. -->
       <div
         ref="monthRow"
@@ -238,9 +238,9 @@ onMounted(() => {
           {{ name }}
         </button>
       </div>
-      <AppIconButton label="Next month" @click="show(view.year, view.month + 1)">
+      <OraIconButton label="Next month" @click="show(view.year, view.month + 1)">
         <IconChevronRight class="size-5.5!" />
-      </AppIconButton>
+      </OraIconButton>
     </div>
 
     <div role="grid" :aria-label="gridLabel" class="flex flex-col gap-0.5">
@@ -318,10 +318,10 @@ onMounted(() => {
     </div>
 
     <div class="flex gap-2.5">
-      <AppButton variant="outlined" class="flex-1! border-primary!" @click="emit('cancel')">
+      <OraButton variant="outlined" class="flex-1! border-primary!" @click="emit('cancel')">
         Cancel
-      </AppButton>
-      <AppButton class="flex-1!" @click="emit('confirm', selected)">Confirm</AppButton>
+      </OraButton>
+      <OraButton class="flex-1!" @click="emit('confirm', selected)">Confirm</OraButton>
     </div>
   </div>
 </template>

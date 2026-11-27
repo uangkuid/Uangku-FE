@@ -29,20 +29,24 @@ bun x oxlint . && bun x eslint .                          # lint without changin
 bun run format               # Prettier on src/ (no semicolons, single quotes, width 100)
 ```
 
-Run `npx playwright install` before the first e2e run. Unit tests live in `__tests__/` folders next to the code (`*.spec.ts`). E2E specs live in `e2e/`.
+Run `npx playwright install` before the first e2e run. Unit tests live in `__tests__/` folders next to the code (`*.spec.ts`): the views (`HomeView`, `LoginView`, `NewTransactionView`) and several `ui/` components. E2E specs live in `e2e/` (`login.spec.ts`, `new-transaction.spec.ts`).
 
 ## Architecture
 
-- `src/router/index.ts`: routes are lazy-loaded views. Home is at `/`, not `/home`. Login is at `/login`. A sheet over a page, such as `/transactions/new`, is a route with a named `sheet` view and `meta.sheet`, which makes the page behind it inert. `App.vue` keeps a leaving sheet on screen for its exit animation, styled with the `sheet-leaving:` variant.
-- `src/views/`: one view per screen. A view composes feature components and gets its data from `src/data/*`.
+- Imports use the `@` alias for `src/` (`@/components/ui/button/OraButton.vue`).
+- `src/router/index.ts`: routes are lazy-loaded views. The routes are `/` (home, not `/home`), `/transactions/new`, `/login` and `/design-system`. A sheet over a page, such as `/transactions/new`, is a route whose `components` hold the page as `default` plus a named `sheet` view, with `meta.sheet`. For now `/transactions/new` sits over `HomeView`; move it over the Transactions screen once that exists.
+- `App.vue` renders both views. While `meta.sheet` is set, the page behind is `inert`. A leaving sheet stays on screen for its exit animation (500 ms, the length of `--motion-default-spatial`), styled with the `sheet-leaving:` variant, and page scroll stays locked until it is gone.
+- Pinia is installed in `main.ts`, but there are no stores yet; views read `src/data/*` directly.
+- `src/views/`: one view per screen (`HomeView`, `LoginView`, `NewTransactionView`, `DesignSystemView`). A view composes feature components and gets its data from `src/data/*`.
 - `src/components/` is grouped by purpose:
-  - `ui/`: the design system (`AppButton`, `AppIconButton`, `AppTextField`, `AppCard`, `AppList`, ...). Check `ui/README.md` before writing new UI.
-  - `layout/`: app chrome such as `AppNavRail`.
-  - `auth/`, `home/`, `transaction/`: components for one screen each.
-  - `icons/`: one SVG component per icon (`IconXxx.vue`).
-- `ComingSoonLink` is a placeholder for links to screens that don't exist yet. When you add a screen's route, replace the placeholders that point to it with `RouterLink`.
-- `src/data/home.ts` holds the prototype data and the shared domain types (`Category`, `Wallet`, `Transaction`); `src/data/newTransaction.ts` holds the form's options. Replace them with real requests once the API exists.
+  - `ui/`: the design system (`OraButton`, `OraButtonGroup`, `OraSplitButton`, `OraIconButton`, `OraFab`, `OraTextField`, `OraTextArea`, `OraCard`, `OraList`, `OraSheet`, `OraSnackbar`, ...). Each component has its own kebab-case folder (`ui/button/OraButton.vue`), with its tests in a `__tests__/` folder inside it; helpers used by more than one component (`button.ts`, `radioGroup.ts`, `dismissOnOutsidePress.ts`) are in `ui/shared/`. New design system components take the `Ora` prefix, never `App`; `CategoryIcon`, `FamilyIcon` and `ComingSoonLink` predate that rule. `ui/README.md` lists every component with its main props and the departures from M3: check it before writing new UI.
+  - `layout/`: app chrome such as `OraNavRail`.
+  - `auth/`, `home/`, `transaction/`: components for one screen each. `transaction/categories.ts` holds the category picker's logic (`CategoryChoice`, `gridChoices`).
+  - `icons/`: one SVG component per icon (`IconXxx.vue`). Category icons are vector paths in `ui/category-icon/categoryIcons.ts`, drawn by `CategoryIcon`.
+- `ComingSoonLink` is a placeholder for links to screens that don't exist yet. Components that can be links take `as`: pass `RouterLink` with `to`, or `ComingSoonLink`. When you add a screen's route, replace the placeholders that point to it with `RouterLink`.
+- `src/data/home.ts` holds the home prototype data and the shared domain types (`Category`, `Wallet`, `Transaction`, `SpendingCategory`); `src/data/newTransaction.ts` holds the form's options and types (`TransactionType`, `CategoryOption`, `DayActivity`). Replace them with real requests once the API exists.
 - `src/utils/rupiah.ts` formats money (`formatRupiah`, `formatSignedRupiah`). Use it for every amount.
+- `src/utils/date.ts` holds calendar helpers. Dates are `IsoDate` strings (`YYYY-MM-DD`, local time), so they compare as text; weeks start on Monday.
 
 ## Styling
 
@@ -52,8 +56,10 @@ The design system follows Material 3 Expressive (m3.material.io). Its components
 
 Its styles have three layers, all imported by `src/assets/main.css`:
 
-1. `tokens.css` defines the color roles as CSS variables, Material 3 style (`--primary`, `--surface-container-high`, ...), for light and dark themes through `[data-theme]`, plus elevation, state layer opacities and the motion springs (`--motion-fast-spatial`, `--motion-default-effects`, ...).
-2. `theme.css` maps those variables into Tailwind's `@theme`. That provides `bg-primary`, `text-on-surface-variant`, the type scale (`text-display-small`, `text-headline-medium`, `text-title-medium`, `text-body-large`, ...), the M3 shape scale (`rounded-corner-xs` to `rounded-corner-xxl`), component shapes (`rounded-card`, `rounded-field`), the `split` breakpoint, and the fonts (`font-sans` is Poppins, `font-display` is Montserrat).
-3. `main.css` adds the `dark:` variant, which follows `data-theme='dark'` rather than the OS setting, plus the custom utilities `state-layer` (hover, focus and press feedback), `transition-morph`, `touch-target` and `focus-ring`.
+1. `tokens.css` defines the color roles as CSS variables, Material 3 style (`--primary`, `--surface-container-high`, ...), for light and dark themes through `[data-theme]`, plus elevation (`shadow-elevation-1` to `-3`), state layer opacities and the motion springs (`--motion-fast-spatial`, `--motion-default-effects`, ...). Spatial springs move size, position and shape; effects springs move color and opacity. All of them become instant under `prefers-reduced-motion`.
+2. `theme.css` maps those variables into Tailwind's `@theme`. That provides `bg-primary`, `text-on-surface-variant`, the type scale (`text-display-small`, `text-headline-medium`, `text-title-medium`, `text-body-large`, ...), the M3 shape scale (`rounded-corner-xs` to `rounded-corner-xxl`, plus `-lg-inc` and `-xl-inc`), component shapes (`rounded-card`, `rounded-field`, `rounded-list-outer`, `rounded-list-inner`), the `split` breakpoint (56.25rem), `animate-shape-spin` for decorative shapes (pair it with `motion-reduce:animate-none`), and the fonts (`font-sans` is Poppins, `font-display` is Montserrat).
+3. `main.css` adds the `dark:` variant, which follows `data-theme='dark'` rather than the OS setting, the `sheet-leaving:` variant, and the custom utilities `state-layer` (hover, focus and press feedback), `transition-morph`, `touch-target` and `focus-ring`.
+
+To give a component a color its variant doesn't offer, use an important utility, e.g. `class="bg-on-primary-container!"`.
 
 Design artboards use DS class names such as `headline-medium-emphasized`. Translate them to these utilities, for example `text-headline-medium font-medium`, and avoid raw hex values.

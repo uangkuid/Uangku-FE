@@ -11,12 +11,12 @@ import IconReport from '@/components/icons/IconReport.vue'
 import IconTransactions from '@/components/icons/IconTransactions.vue'
 import IconUser from '@/components/icons/IconUser.vue'
 import IconWallet from '@/components/icons/IconWallet.vue'
-import AppAvatar from '@/components/ui/AppAvatar.vue'
-import AppDivider from '@/components/ui/AppDivider.vue'
-import AppFab from '@/components/ui/AppFab.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import AppNavRailItem from '@/components/ui/AppNavRailItem.vue'
-import ComingSoonLink from '@/components/ui/ComingSoonLink.vue'
+import OraAvatar from '@/components/ui/avatar/OraAvatar.vue'
+import OraDivider from '@/components/ui/divider/OraDivider.vue'
+import OraFab from '@/components/ui/fab/OraFab.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import OraNavRailItem from '@/components/ui/nav-rail-item/OraNavRailItem.vue'
+import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
 
 defineProps<{
   user: { name: string; family: string; initials: string }
@@ -51,13 +51,13 @@ const expanded = ref(false)
     :class="expanded ? 'w-60 px-3' : 'w-24 items-center'"
   >
     <div class="flex w-full items-center gap-2" :class="expanded ? 'pl-2' : 'flex-col'">
-      <AppIconButton
+      <OraIconButton
         :label="expanded ? 'Collapse navigation' : 'Expand navigation'"
         :aria-expanded="expanded"
         @click="expanded = !expanded"
       >
         <IconMenu />
-      </AppIconButton>
+      </OraIconButton>
       <RouterLink
         v-if="expanded"
         :to="{ name: 'home' }"
@@ -68,7 +68,7 @@ const expanded = ref(false)
       </RouterLink>
     </div>
 
-    <AppFab
+    <OraFab
       :as="RouterLink"
       :to="{ name: 'transaction-new' }"
       label="New transaction"
@@ -77,12 +77,12 @@ const expanded = ref(false)
       :class="{ 'ml-1 self-start': expanded }"
     >
       <IconPlus />
-    </AppFab>
+    </OraFab>
 
     <div class="flex w-full flex-col" :class="expanded ? 'gap-0.5' : 'gap-1'">
       <template v-for="(items, group) in [mainItems, sharedItems]" :key="group">
         <template v-if="group === 1">
-          <AppDivider :class="expanded ? 'mx-4 my-2' : 'my-1 w-10 self-center!'" />
+          <OraDivider :class="expanded ? 'mx-4 my-2' : 'my-1 w-10 self-center!'" />
           <span
             v-if="expanded"
             class="px-4 py-1 text-label-medium font-semibold text-on-surface-variant"
@@ -91,7 +91,7 @@ const expanded = ref(false)
           </span>
         </template>
 
-        <AppNavRailItem
+        <OraNavRailItem
           v-for="item in items"
           :key="item.label"
           :as="item.to ? RouterLink : ComingSoonLink"
@@ -122,7 +122,7 @@ const expanded = ref(false)
         </span>
       </div>
       <div class="flex items-center gap-3" :class="{ 'px-2 py-1': expanded }">
-        <AppAvatar :initials="user.initials" />
+        <OraAvatar :initials="user.initials" />
         <span v-if="expanded" class="flex flex-col">
           <span class="text-title-small font-semibold">{{ user.name }}</span>
           <span class="text-body-small text-on-surface-variant">{{ user.family }}</span>

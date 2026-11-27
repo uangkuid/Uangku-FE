@@ -10,11 +10,11 @@ import IconGoogle from '@/components/icons/IconGoogle.vue'
 import IconKey from '@/components/icons/IconKey.vue'
 import IconMail from '@/components/icons/IconMail.vue'
 import IconPassword from '@/components/icons/IconPassword.vue'
-import AppBanner from '@/components/ui/AppBanner.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppDivider from '@/components/ui/AppDivider.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import AppTextField from '@/components/ui/AppTextField.vue'
+import OraBanner from '@/components/ui/banner/OraBanner.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraDivider from '@/components/ui/divider/OraDivider.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import OraTextField from '@/components/ui/text-field/OraTextField.vue'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 /** How long the success message stays up before the home page opens. */
@@ -84,14 +84,14 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
 
     <section class="flex items-center justify-center py-6 split:px-6">
       <div class="flex w-full max-w-110 flex-col gap-6">
-        <AppIconButton
+        <OraIconButton
           v-if="step === 'unlock'"
           label="Back to email"
           class="-mb-2 -ml-2 self-start text-on-surface!"
           @click="backToEmail"
         >
           <IconArrowLeft />
-        </AppIconButton>
+        </OraIconButton>
 
         <StepProgress :current="step === 'email' ? 1 : 2" :total="2" />
 
@@ -107,18 +107,18 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
             personalized dashboard.
           </p>
 
-          <AppButton variant="outlined" size="m">
+          <OraButton variant="outlined" size="m">
             <IconGoogle />
             <span class="flex-1 pr-8.5 text-center">Sign in with Google</span>
-          </AppButton>
-          <AppButton variant="outlined" size="m">
+          </OraButton>
+          <OraButton variant="outlined" size="m">
             <IconApple />
             <span class="flex-1 pr-8.5 text-center">Sign in with Apple</span>
-          </AppButton>
+          </OraButton>
 
-          <AppDivider>OR</AppDivider>
+          <OraDivider>OR</OraDivider>
 
-          <AppTextField
+          <OraTextField
             id="email"
             v-model="email"
             label="Email"
@@ -130,9 +130,9 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
             :error="emailError"
           >
             <template #icon><IconMail /></template>
-          </AppTextField>
+          </OraTextField>
 
-          <AppButton type="submit" size="m">Continue</AppButton>
+          <OraButton type="submit" size="m">Continue</OraButton>
         </form>
 
         <form v-else class="flex flex-col gap-4.5" novalidate @submit.prevent="onSignIn">
@@ -141,7 +141,7 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
             Enter your password and secret key. Both stay on this device and are never sent to us.
           </p>
 
-          <AppTextField
+          <OraTextField
             id="locked-email"
             :model-value="email.trim()"
             label="Email"
@@ -152,14 +152,14 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
           >
             <template #icon><IconMail /></template>
             <template #trailing>
-              <AppDivider vertical />
-              <AppButton variant="text" aria-label="Change email" @click="backToEmail">
+              <OraDivider vertical />
+              <OraButton variant="text" aria-label="Change email" @click="backToEmail">
                 Change
-              </AppButton>
+              </OraButton>
             </template>
-          </AppTextField>
+          </OraTextField>
 
-          <AppTextField
+          <OraTextField
             id="password"
             v-model="password"
             label="Password"
@@ -172,17 +172,17 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
           >
             <template #icon><IconPassword /></template>
             <template #trailing>
-              <AppIconButton
+              <OraIconButton
                 :label="showPassword ? 'Hide password' : 'Show password'"
                 :selected="showPassword"
                 @click="showPassword = !showPassword"
               >
                 <IconEye :off="showPassword" />
-              </AppIconButton>
+              </OraIconButton>
             </template>
-          </AppTextField>
+          </OraTextField>
 
-          <AppTextField
+          <OraTextField
             id="secret-key"
             v-model="secretKey"
             label="Secret Key"
@@ -196,13 +196,13 @@ watch(unlocked, (isUnlocked, _, onCleanup) => {
             @input="unlocked = false"
           >
             <template #icon><IconKey /></template>
-          </AppTextField>
+          </OraTextField>
 
-          <AppButton type="submit" size="m">Sign in</AppButton>
+          <OraButton type="submit" size="m">Sign in</OraButton>
 
-          <AppBanner v-if="unlocked" tone="success" role="status">
+          <OraBanner v-if="unlocked" tone="success" role="status">
             Unlocked on this device. Opening your wallets…
-          </AppBanner>
+          </OraBanner>
         </form>
 
         <p class="mt-1 text-center text-body-medium text-on-surface-variant">

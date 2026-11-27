@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppCard from '@/components/ui/AppCard.vue'
-import AppLinearProgress from '@/components/ui/AppLinearProgress.vue'
-import CategoryIcon from '@/components/ui/CategoryIcon.vue'
-import ComingSoonLink from '@/components/ui/ComingSoonLink.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraCard from '@/components/ui/card/OraCard.vue'
+import OraLinearProgress from '@/components/ui/linear-progress/OraLinearProgress.vue'
+import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
+import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
 import type { SpendingCategory } from '@/data/home'
 import { formatRupiah } from '@/utils/rupiah'
 
@@ -15,7 +15,7 @@ const BAR_COLORS = ['bg-primary', 'bg-logo-blue', 'bg-tertiary']
 </script>
 
 <template>
-  <AppCard variant="outlined" class="gap-4.5 p-5 sm:p-6" aria-labelledby="top-title">
+  <OraCard variant="outlined" class="gap-4.5 p-5 sm:p-6" aria-labelledby="top-title">
     <div class="flex flex-col gap-1">
       <h2 id="top-title" class="text-title-large font-medium">Where it went</h2>
       <p class="text-body-medium text-on-surface-variant">Top spending this month.</p>
@@ -31,7 +31,7 @@ const BAR_COLORS = ['bg-primary', 'bg-logo-blue', 'bg-tertiary']
           </span>
         </div>
         <div class="flex items-center gap-2.5">
-          <AppLinearProgress
+          <OraLinearProgress
             class="flex-1"
             :value="item.percent"
             :label="`${item.name} share of spending`"
@@ -46,9 +46,9 @@ const BAR_COLORS = ['bg-primary', 'bg-logo-blue', 'bg-tertiary']
       </li>
     </ul>
 
-    <AppButton :as="ComingSoonLink" class="self-start">
+    <OraButton :as="ComingSoonLink" class="self-start">
       Open report
       <IconChevronRight />
-    </AppButton>
-  </AppCard>
+    </OraButton>
+  </OraCard>
 </template>

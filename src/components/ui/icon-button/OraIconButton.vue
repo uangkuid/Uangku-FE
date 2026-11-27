@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue'
-import { buttonShapeClasses, type ButtonShape, type ButtonSize } from './button'
+import { buttonShapeClasses, type ButtonShape, type ButtonSize } from '../shared/button'
 
 type Variant = 'standard' | 'filled' | 'tonal' | 'outlined'
 type Width = 'narrow' | 'default' | 'wide'

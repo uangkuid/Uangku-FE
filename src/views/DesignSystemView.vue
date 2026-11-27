@@ -7,29 +7,29 @@ import IconHome from '@/components/icons/IconHome.vue'
 import IconMail from '@/components/icons/IconMail.vue'
 import IconPlus from '@/components/icons/IconPlus.vue'
 import IconWallet from '@/components/icons/IconWallet.vue'
-import AppAvatar from '@/components/ui/AppAvatar.vue'
-import AppBadge from '@/components/ui/AppBadge.vue'
-import AppBanner from '@/components/ui/AppBanner.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppButtonGroup from '@/components/ui/AppButtonGroup.vue'
-import AppCard from '@/components/ui/AppCard.vue'
-import AppChip from '@/components/ui/AppChip.vue'
-import AppCircularProgress from '@/components/ui/AppCircularProgress.vue'
-import AppDivider from '@/components/ui/AppDivider.vue'
-import AppFab from '@/components/ui/AppFab.vue'
-import AppIconButton from '@/components/ui/AppIconButton.vue'
-import AppLinearProgress from '@/components/ui/AppLinearProgress.vue'
-import AppList from '@/components/ui/AppList.vue'
-import AppListItem from '@/components/ui/AppListItem.vue'
-import AppNavRailItem from '@/components/ui/AppNavRailItem.vue'
-import AppSheet from '@/components/ui/AppSheet.vue'
-import AppSnackbar from '@/components/ui/AppSnackbar.vue'
-import AppSplitButton from '@/components/ui/AppSplitButton.vue'
-import AppTag from '@/components/ui/AppTag.vue'
-import AppTextArea from '@/components/ui/AppTextArea.vue'
-import AppTextField from '@/components/ui/AppTextField.vue'
-import CategoryIcon from '@/components/ui/CategoryIcon.vue'
-import FamilyIcon from '@/components/ui/FamilyIcon.vue'
+import OraAvatar from '@/components/ui/avatar/OraAvatar.vue'
+import OraBadge from '@/components/ui/badge/OraBadge.vue'
+import OraBanner from '@/components/ui/banner/OraBanner.vue'
+import OraButton from '@/components/ui/button/OraButton.vue'
+import OraButtonGroup from '@/components/ui/button-group/OraButtonGroup.vue'
+import OraCard from '@/components/ui/card/OraCard.vue'
+import OraChip from '@/components/ui/chip/OraChip.vue'
+import OraCircularProgress from '@/components/ui/circular-progress/OraCircularProgress.vue'
+import OraDivider from '@/components/ui/divider/OraDivider.vue'
+import OraFab from '@/components/ui/fab/OraFab.vue'
+import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
+import OraLinearProgress from '@/components/ui/linear-progress/OraLinearProgress.vue'
+import OraList from '@/components/ui/list/OraList.vue'
+import OraListItem from '@/components/ui/list/OraListItem.vue'
+import OraNavRailItem from '@/components/ui/nav-rail-item/OraNavRailItem.vue'
+import OraSheet from '@/components/ui/sheet/OraSheet.vue'
+import OraSnackbar from '@/components/ui/snackbar/OraSnackbar.vue'
+import OraSplitButton from '@/components/ui/split-button/OraSplitButton.vue'
+import OraTag from '@/components/ui/tag/OraTag.vue'
+import OraTextArea from '@/components/ui/text-area/OraTextArea.vue'
+import OraTextField from '@/components/ui/text-field/OraTextField.vue'
+import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
+import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
 
 const dark = ref(false)
 watch(dark, (isDark) => {
@@ -116,10 +116,10 @@ const notes = ref('')
           Material 3 Expressive components with the Uangku theme.
         </p>
       </div>
-      <AppButton variant="tonal" :selected="dark" @click="dark = !dark">Dark theme</AppButton>
+      <OraButton variant="tonal" :selected="dark" @click="dark = !dark">Dark theme</OraButton>
     </header>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-color">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-color">
       <h2 id="ds-color" class="text-title-large font-medium">Color roles</h2>
       <ul class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-2">
         <li
@@ -131,14 +131,14 @@ const notes = ref('')
           {{ color.split(' ')[0]?.replace('bg-', '') }}
         </li>
       </ul>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-3 p-5" aria-labelledby="ds-type">
+    <OraCard variant="outlined" class="gap-3 p-5" aria-labelledby="ds-type">
       <h2 id="ds-type" class="text-title-large font-medium">Type scale</h2>
       <p v-for="style in typeScale" :key="style" :class="style">{{ style.split(' ')[0] }}</p>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-shape">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-shape">
       <h2 id="ds-shape" class="text-title-large font-medium">Shape scale</h2>
       <ul class="flex flex-wrap gap-3">
         <li v-for="shape in shapes" :key="shape" class="flex flex-col items-center gap-1">
@@ -146,52 +146,52 @@ const notes = ref('')
           <span class="text-label-small">{{ shape.replace('rounded-', '') }}</span>
         </li>
       </ul>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-button">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-button">
       <h2 id="ds-button" class="text-title-large font-medium">Buttons</h2>
       <div class="flex flex-wrap items-center gap-3">
-        <AppButton v-for="variant in buttonVariants" :key="variant" :variant="variant">
+        <OraButton v-for="variant in buttonVariants" :key="variant" :variant="variant">
           {{ variant }}
-        </AppButton>
-        <AppButton disabled>disabled</AppButton>
+        </OraButton>
+        <OraButton disabled>disabled</OraButton>
       </div>
       <div class="flex flex-wrap items-center gap-3 overflow-x-auto">
-        <AppButton v-for="size in sizes" :key="size" :size="size">
+        <OraButton v-for="size in sizes" :key="size" :size="size">
           <IconPlus />{{ size }}
-        </AppButton>
+        </OraButton>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <AppButton shape="square" variant="tonal">square</AppButton>
-        <AppButton :selected="selected" @click="selected = !selected">toggle</AppButton>
-        <AppButton variant="outlined" :selected="selected" @click="selected = !selected">
+        <OraButton shape="square" variant="tonal">square</OraButton>
+        <OraButton :selected="selected" @click="selected = !selected">toggle</OraButton>
+        <OraButton variant="outlined" :selected="selected" @click="selected = !selected">
           toggle
-        </AppButton>
+        </OraButton>
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-icon-button">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-icon-button">
       <h2 id="ds-icon-button" class="text-title-large font-medium">Icon buttons</h2>
       <div class="flex flex-wrap items-center gap-3">
-        <AppIconButton
+        <OraIconButton
           v-for="variant in iconButtonVariants"
           :key="variant"
           :variant="variant"
           :label="variant"
         >
           <IconBell />
-        </AppIconButton>
-        <AppIconButton
+        </OraIconButton>
+        <OraIconButton
           variant="filled"
           label="Toggle visibility"
           :selected="selected"
           @click="selected = !selected"
         >
           <IconEye :off="selected" />
-        </AppIconButton>
+        </OraIconButton>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <AppIconButton
+        <OraIconButton
           v-for="size in sizes"
           :key="size"
           variant="tonal"
@@ -199,10 +199,10 @@ const notes = ref('')
           :label="`Size ${size}`"
         >
           <IconBell />
-        </AppIconButton>
+        </OraIconButton>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <AppIconButton
+        <OraIconButton
           v-for="width in widths"
           :key="width"
           variant="tonal"
@@ -210,19 +210,19 @@ const notes = ref('')
           :label="`Width ${width}`"
         >
           <IconBell />
-        </AppIconButton>
-        <AppIconButton label="Notifications, 3 new">
+        </OraIconButton>
+        <OraIconButton label="Notifications, 3 new">
           <IconBell />
-          <AppBadge :label="3" class="absolute top-1 right-0.5" />
-        </AppIconButton>
+          <OraBadge :label="3" class="absolute top-1 right-0.5" />
+        </OraIconButton>
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-group">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-group">
       <h2 id="ds-group" class="text-title-large font-medium">
         Button groups, chips and split button
       </h2>
-      <AppButtonGroup
+      <OraButtonGroup
         label="Period"
         size="m"
         fill
@@ -230,7 +230,7 @@ const notes = ref('')
         :selected="period"
         @select="period = $event"
       />
-      <AppButtonGroup
+      <OraButtonGroup
         label="Compact period"
         selection="toggle"
         :options="periods"
@@ -238,31 +238,31 @@ const notes = ref('')
         @select="period = $event"
       />
       <div class="flex flex-wrap items-center gap-3">
-        <AppChip :selected="selected" @click="selected = !selected">Filter chip</AppChip>
-        <AppChip :selected="!selected" @click="selected = !selected">Other chip</AppChip>
-        <AppSplitButton
+        <OraChip :selected="selected" @click="selected = !selected">Filter chip</OraChip>
+        <OraChip :selected="!selected" @click="selected = !selected">Other chip</OraChip>
+        <OraSplitButton
           label="Save"
           menu-label="More save options"
           :items="[{ value: 'another', label: 'Save & add another' }]"
         />
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-fab">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-fab">
       <h2 id="ds-fab" class="text-title-large font-medium">FAB and extended FAB</h2>
       <div class="flex flex-wrap items-center gap-4">
-        <AppFab v-for="size in fabSizes" :key="size" :size="size" :label="`New ${size}`">
+        <OraFab v-for="size in fabSizes" :key="size" :size="size" :label="`New ${size}`">
           <IconPlus />
-        </AppFab>
-        <AppFab extended label="New transaction"><IconPlus /></AppFab>
-        <AppFab extended color="primary" label="New wallet"><IconWallet /></AppFab>
+        </OraFab>
+        <OraFab extended label="New transaction"><IconPlus /></OraFab>
+        <OraFab extended color="primary" label="New wallet"><IconWallet /></OraFab>
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-field">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-field">
       <h2 id="ds-field" class="text-title-large font-medium">Text fields</h2>
       <div class="grid gap-4 sm:grid-cols-2">
-        <AppTextField
+        <OraTextField
           id="ds-enabled"
           v-model="text"
           label="Email"
@@ -270,18 +270,18 @@ const notes = ref('')
           supporting-text="We never share it."
         >
           <template #icon><IconMail /></template>
-        </AppTextField>
-        <AppTextField id="ds-error" v-model="text" label="Error" error="Email is required" />
-        <AppTextField id="ds-readonly" model-value="Read only" label="Read only" readonly />
-        <AppTextField id="ds-disabled" model-value="Disabled" label="Disabled" disabled />
+        </OraTextField>
+        <OraTextField id="ds-error" v-model="text" label="Error" error="Email is required" />
+        <OraTextField id="ds-readonly" model-value="Read only" label="Read only" readonly />
+        <OraTextField id="ds-disabled" model-value="Disabled" label="Disabled" disabled />
       </div>
-      <AppTextArea id="ds-notes" v-model="notes" label="Notes" placeholder="Multi-line text" />
-    </AppCard>
+      <OraTextArea id="ds-notes" v-model="notes" label="Notes" placeholder="Multi-line text" />
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-card">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-card">
       <h2 id="ds-card" class="text-title-large font-medium">Cards</h2>
       <div class="grid gap-3 sm:grid-cols-3">
-        <AppCard
+        <OraCard
           v-for="variant in cardVariants"
           :key="variant"
           as="div"
@@ -289,44 +289,44 @@ const notes = ref('')
           class="p-6"
         >
           {{ variant }}
-        </AppCard>
+        </OraCard>
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="filled" class="gap-4 p-5" aria-labelledby="ds-list">
+    <OraCard variant="filled" class="gap-4 p-5" aria-labelledby="ds-list">
       <h2 id="ds-list" class="text-title-large font-medium">Segmented list</h2>
-      <AppList>
-        <AppListItem as="button">
+      <OraList>
+        <OraListItem as="button">
           <template #leading><CategoryIcon category="salary" /></template>
           <template #headline>Salary</template>
-          <template #supporting><AppTag>Bank</AppTag><FamilyIcon /></template>
+          <template #supporting><OraTag>Bank</OraTag><FamilyIcon /></template>
           <template #trailing>+Rp 2.500.000</template>
-        </AppListItem>
-        <AppListItem as="button">
+        </OraListItem>
+        <OraListItem as="button">
           <template #leading><CategoryIcon category="food" /></template>
           <template #headline>Food</template>
           <template #supporting>Lunch</template>
-        </AppListItem>
-        <AppListItem>
+        </OraListItem>
+        <OraListItem>
           <template #headline>Static item</template>
-        </AppListItem>
-      </AppList>
-    </AppCard>
+        </OraListItem>
+      </OraList>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-progress">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-progress">
       <h2 id="ds-progress" class="text-title-large font-medium">Progress indicators</h2>
-      <AppLinearProgress :value="progress" label="Example progress" />
-      <AppLinearProgress :value="progress" label="Thick example progress" :thickness="12" />
+      <OraLinearProgress :value="progress" label="Example progress" />
+      <OraLinearProgress :value="progress" label="Thick example progress" :thickness="12" />
       <div class="flex flex-wrap items-center gap-4">
-        <AppCircularProgress :value="progress" label="Example ring" />
-        <AppCircularProgress :value="progress" label="Large ring" :size="96" :thickness="10">
+        <OraCircularProgress :value="progress" label="Example ring" />
+        <OraCircularProgress :value="progress" label="Large ring" :size="96" :thickness="10">
           <span class="text-label-large">{{ progress }}%</span>
-        </AppCircularProgress>
-        <AppButton variant="tonal" @click="progress = (progress + 20) % 120">Advance</AppButton>
+        </OraCircularProgress>
+        <OraButton variant="tonal" @click="progress = (progress + 20) % 120">Advance</OraButton>
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-nav">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-nav">
       <h2 id="ds-nav" class="text-title-large font-medium">Navigation rail items</h2>
       <div class="flex flex-wrap items-start gap-8">
         <div
@@ -335,7 +335,7 @@ const notes = ref('')
           class="flex flex-col gap-1 rounded-corner-lg bg-surface-container py-3"
           :class="expanded ? 'w-60 px-3' : 'w-24'"
         >
-          <AppNavRailItem
+          <OraNavRailItem
             v-for="item in [
               { label: 'Home', icon: IconHome },
               { label: 'Wallet', icon: IconWallet },
@@ -349,26 +349,26 @@ const notes = ref('')
           />
         </div>
       </div>
-    </AppCard>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-misc">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-misc">
       <h2 id="ds-misc" class="text-title-large font-medium">Tags, avatar, dividers and banners</h2>
       <div class="flex flex-wrap items-center gap-3">
-        <AppTag>Cash</AppTag>
-        <AppTag color="primary" size="m">+Rp 2.000.000 this month</AppTag>
+        <OraTag>Cash</OraTag>
+        <OraTag color="primary" size="m">+Rp 2.000.000 this month</OraTag>
         <FamilyIcon />
-        <AppAvatar initials="UK" />
-        <AppButton variant="text">View all<IconChevronRight /></AppButton>
+        <OraAvatar initials="UK" />
+        <OraButton variant="text">View all<IconChevronRight /></OraButton>
       </div>
-      <AppDivider />
-      <AppDivider>OR</AppDivider>
-      <AppBanner v-for="tone in tones" :key="tone" :tone="tone">{{ tone }} message</AppBanner>
-    </AppCard>
+      <OraDivider />
+      <OraDivider>OR</OraDivider>
+      <OraBanner v-for="tone in tones" :key="tone" :tone="tone">{{ tone }} message</OraBanner>
+    </OraCard>
 
-    <AppCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-sheet">
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-sheet">
       <h2 id="ds-sheet" class="text-title-large font-medium">Side sheet and snackbar</h2>
       <div class="relative h-80 overflow-hidden rounded-corner-lg bg-surface-dim">
-        <AppSheet
+        <OraSheet
           title-id="ds-sheet-example"
           title="Sheet title"
           overline="Overline"
@@ -378,11 +378,11 @@ const notes = ref('')
           <p class="px-7 text-body-medium">The body of the sheet scrolls.</p>
           <template #footer>
             <footer class="p-4">
-              <AppSnackbar action="Undo">Transaction saved</AppSnackbar>
+              <OraSnackbar action="Undo">Transaction saved</OraSnackbar>
             </footer>
           </template>
-        </AppSheet>
+        </OraSheet>
       </div>
-    </AppCard>
+    </OraCard>
   </main>
 </template>
