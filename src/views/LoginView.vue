@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import AuthBrandPanel from '@/components/auth/AuthBrandPanel.vue'
 import StepProgress from '@/components/auth/StepProgress.vue'
 import IconApple from '@/components/icons/IconApple.vue'
@@ -10,10 +10,17 @@ import IconGoogle from '@/components/icons/IconGoogle.vue'
 import IconKey from '@/components/icons/IconKey.vue'
 import IconMail from '@/components/icons/IconMail.vue'
 import IconPassword from '@/components/icons/IconPassword.vue'
+import AppBanner from '@/components/ui/AppBanner.vue'
 import AppButton from '@/components/ui/AppButton.vue'
+import AppDivider from '@/components/ui/AppDivider.vue'
+import AppIconButton from '@/components/ui/AppIconButton.vue'
 import AppTextField from '@/components/ui/AppTextField.vue'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+/** How long the success message stays up before the home page opens. */
+const OPEN_HOME_DELAY_MS = 900
+
+const router = useRouter()
 
 const step = ref<'email' | 'unlock'>('email')
 const email = ref('')
@@ -57,9 +64,16 @@ function backToEmail() {
 function onSignIn() {
   triedSignIn.value = true
   // TODO: no authentication backend yet. Unlock the data here once it exists;
-  // for now a complete form only shows the success state from the design.
+  // for now any complete form is accepted.
   unlocked.value = !passwordError.value && !secretKeyError.value
 }
+
+// Editing a credential, going back or leaving the page cancels the pending navigation.
+watch(unlocked, (isUnlocked, _, onCleanup) => {
+  if (!isUnlocked) return
+  const timer = setTimeout(() => router.push({ name: 'home' }), OPEN_HOME_DELAY_MS)
+  onCleanup(() => clearTimeout(timer))
+})
 </script>
 
 <template>
@@ -70,15 +84,14 @@ function onSignIn() {
 
     <section class="flex items-center justify-center py-6 split:px-6">
       <div class="flex w-full max-w-110 flex-col gap-6">
-        <AppButton
+        <AppIconButton
           v-if="step === 'unlock'"
-          variant="icon"
-          class="-mb-2 -ml-3 self-start"
-          aria-label="Back to email"
+          label="Back to email"
+          class="-mb-2 -ml-2 self-start text-on-surface!"
           @click="backToEmail"
         >
           <IconArrowLeft />
-        </AppButton>
+        </AppIconButton>
 
         <StepProgress :current="step === 'email' ? 1 : 2" :total="2" />
 
@@ -94,20 +107,16 @@ function onSignIn() {
             personalized dashboard.
           </p>
 
-          <AppButton variant="outlined">
+          <AppButton variant="outlined" size="m">
             <IconGoogle />
             <span class="flex-1 pr-8.5 text-center">Sign in with Google</span>
           </AppButton>
-          <AppButton variant="outlined">
+          <AppButton variant="outlined" size="m">
             <IconApple />
             <span class="flex-1 pr-8.5 text-center">Sign in with Apple</span>
           </AppButton>
 
-          <div
-            class="flex items-center gap-3.5 text-on-surface-variant before:h-px before:flex-1 before:bg-outline-variant after:h-px after:flex-1 after:bg-outline-variant"
-          >
-            <span class="text-label-medium">OR</span>
-          </div>
+          <AppDivider>OR</AppDivider>
 
           <AppTextField
             id="email"
@@ -123,7 +132,7 @@ function onSignIn() {
             <template #icon><IconMail /></template>
           </AppTextField>
 
-          <AppButton type="submit">Continue</AppButton>
+          <AppButton type="submit" size="m">Continue</AppButton>
         </form>
 
         <form v-else class="flex flex-col gap-4.5" novalidate @submit.prevent="onSignIn">
@@ -143,7 +152,7 @@ function onSignIn() {
           >
             <template #icon><IconMail /></template>
             <template #trailing>
-              <span class="h-8 w-px bg-outline-variant" aria-hidden="true"></span>
+              <AppDivider vertical />
               <AppButton variant="text" aria-label="Change email" @click="backToEmail">
                 Change
               </AppButton>
@@ -163,15 +172,13 @@ function onSignIn() {
           >
             <template #icon><IconPassword /></template>
             <template #trailing>
-              <AppButton
-                variant="icon"
-                class="text-on-surface-variant"
-                :aria-pressed="showPassword"
-                :aria-label="showPassword ? 'Hide password' : 'Show password'"
+              <AppIconButton
+                :label="showPassword ? 'Hide password' : 'Show password'"
+                :selected="showPassword"
                 @click="showPassword = !showPassword"
               >
-                <IconEye width="22" height="22" :off="showPassword" />
-              </AppButton>
+                <IconEye :off="showPassword" />
+              </AppIconButton>
             </template>
           </AppTextField>
 
@@ -191,22 +198,18 @@ function onSignIn() {
             <template #icon><IconKey /></template>
           </AppTextField>
 
-          <AppButton type="submit">Sign in</AppButton>
+          <AppButton type="submit" size="m">Sign in</AppButton>
 
-          <div
-            v-if="unlocked"
-            role="status"
-            class="rounded-[20px] bg-success-container px-4.5 py-3.5 text-body-medium font-medium text-on-success-container"
-          >
+          <AppBanner v-if="unlocked" tone="success" role="status">
             Unlocked on this device. Opening your wallets…
-          </div>
+          </AppBanner>
         </form>
 
         <p class="mt-1 text-center text-body-medium text-on-surface-variant">
           New to Uangku?
           <RouterLink
             to="/register"
-            class="focus-ring rounded-sm text-label-large font-semibold text-primary hover:underline"
+            class="focus-ring rounded-corner-xs text-label-large font-semibold text-primary hover:underline"
           >
             Create account
           </RouterLink>

@@ -10,7 +10,7 @@ import ShapeCookie from './ShapeCookie.vue'
 <!-- Below `split` (not covered by the design) this is a compact banner above the form. -->
 <template>
   <section
-    class="relative flex flex-col justify-between gap-8 overflow-hidden rounded-4xl bg-primary-container p-6 text-on-primary-container split:rounded-[48px] split:p-12"
+    class="relative flex flex-col justify-between gap-8 overflow-hidden rounded-card bg-primary-container p-6 text-on-primary-container split:rounded-corner-xxl split:p-12"
     aria-label="About Uangku"
   >
     <ShapeCookie
@@ -23,7 +23,7 @@ import ShapeCookie from './ShapeCookie.vue'
 
     <!-- Decorative illustration of a locked account card -->
     <div
-      class="relative hidden w-65 flex-col items-center gap-4 self-center rounded-4xl bg-surface p-7 text-on-surface shadow-elevation-1 split:flex"
+      class="relative hidden w-65 flex-col items-center gap-4 self-center rounded-card bg-surface p-7 text-on-surface shadow-elevation-1 split:flex"
       aria-hidden="true"
     >
       <div
@@ -31,8 +31,10 @@ import ShapeCookie from './ShapeCookie.vue'
       >
         <IconUser width="32" height="32" />
       </div>
-      <div class="h-7 w-full rounded-8 bg-surface-container-high"></div>
-      <div class="flex h-7 w-full items-center gap-1.5 rounded-8 bg-surface-container-high px-3">
+      <div class="h-7 w-full rounded-corner-sm bg-surface-container-high"></div>
+      <div
+        class="flex h-7 w-full items-center gap-1.5 rounded-corner-sm bg-surface-container-high px-3"
+      >
         <span
           v-for="dot in 5"
           :key="dot"
@@ -40,7 +42,7 @@ import ShapeCookie from './ShapeCookie.vue'
         ></span>
       </div>
       <div
-        class="absolute -bottom-5 -left-5 flex size-14 items-center justify-center rounded-16 bg-inverse-surface text-inverse-on-surface"
+        class="absolute -bottom-5 -left-5 flex size-14 items-center justify-center rounded-corner-lg bg-inverse-surface text-inverse-on-surface"
       >
         <IconLock stroke-width="2.2" />
       </div>

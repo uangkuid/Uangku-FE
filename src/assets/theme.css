@@ -1,4 +1,4 @@
-/* Maps the design tokens to Tailwind utilities, e.g. `bg-primary`, `text-body-large`, `rounded-14`. */
+/* Maps the design tokens to Tailwind utilities, e.g. `bg-primary`, `text-body-large`, `rounded-card`. */
 
 /* Color roles. `inline` keeps utilities pointing at the variables in tokens.css, so themes switch. */
 @theme inline {
@@ -47,19 +47,35 @@
   --color-info-container: var(--info-container);
   --color-on-info-container: var(--on-info-container);
   --color-logo-blue: var(--logo-blue);
+  --color-on-logo-blue: var(--on-logo-blue);
+  --color-category-container: var(--category-container);
+  --color-on-category-container: var(--on-category-container);
 
   --shadow-elevation-1: var(--elevation-1);
+  --shadow-elevation-2: var(--elevation-2);
+  --shadow-elevation-3: var(--elevation-3);
 }
 
 @theme {
   --font-sans: 'Poppins', system-ui, sans-serif;
   --font-display: 'Montserrat', 'Poppins', system-ui, sans-serif;
 
-  --radius-8: 8px;
-  --radius-12: 12px;
-  --radius-14: 14px;
-  --radius-16: 16px;
-  --radius-24: 24px;
+  /* M3 corner radius scale (`full` is Tailwind's `rounded-full`). */
+  --radius-corner-none: 0px;
+  --radius-corner-xs: 4px;
+  --radius-corner-sm: 8px;
+  --radius-corner-md: 12px;
+  --radius-corner-lg: 16px;
+  --radius-corner-lg-inc: 20px;
+  --radius-corner-xl: 28px;
+  --radius-corner-xl-inc: 32px;
+  --radius-corner-xxl: 48px;
+
+  /* Uangku shapes: where the design departs from the M3 default for a component. */
+  --radius-card: 32px;
+  --radius-field: 14px;
+  --radius-list-outer: 24px;
+  --radius-list-inner: 6px;
 
   /* Two-column layouts start at 900px. */
   --breakpoint-split: 56.25rem;
