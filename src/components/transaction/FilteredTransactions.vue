@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import IconClose from '@/components/icons/IconClose.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
 import TransactionRow from '@/components/transaction/TransactionRow.vue'
 import OraButton from '@/components/ui/button/OraButton.vue'
 import OraCard from '@/components/ui/card/OraCard.vue'
 import OraList from '@/components/ui/list/OraList.vue'
+import { useListMotion } from '@/components/ui/shared/useListMotion'
 import type { LedgerEntry } from '@/data/transactions'
 import { useTransactionFiltersStore } from '@/stores/transactionFilters'
 import { formatShortDate } from '@/utils/date'
@@ -24,6 +25,12 @@ defineEmits<{
 }>()
 
 const filters = useTransactionFiltersStore()
+
+const list = useTemplateRef('list')
+useListMotion(
+  () => list.value,
+  () => props.entries,
+)
 
 const count = computed(() => props.entries.length)
 const income = computed(() =>
@@ -61,8 +68,9 @@ function clearEverything() {
 
     <div class="flex flex-wrap items-start gap-6">
       <section
+        ref="list"
         aria-labelledby="results-title"
-        class="flex min-w-0 flex-[2_1_480px] flex-col gap-3.5 rounded-card bg-surface-container-low px-3.5 pt-5 pb-3.5"
+        class="relative flex min-w-0 flex-[2_1_480px] flex-col gap-3.5 rounded-card bg-surface-container-low px-3.5 pt-5 pb-3.5"
       >
         <div class="flex flex-wrap items-baseline justify-between gap-2 px-2.5">
           <h2 id="results-title" class="text-title-large font-semibold" aria-live="polite">
@@ -76,6 +84,7 @@ function clearEverything() {
             v-for="entry in entries"
             :key="entry.id"
             v-bind="entry"
+            :data-motion-key="entry.id"
             :date="formatShortDate(entry.date)"
             :selected="entry.id === selectedId"
             @click="$emit('open', entry)"
@@ -83,6 +92,7 @@ function clearEverything() {
         </OraList>
         <div
           v-else
+          data-motion-key="empty"
           class="flex flex-col items-center gap-3.5 rounded-list-outer bg-surface-container-lowest px-7 py-10 text-center"
         >
           <span

@@ -102,6 +102,18 @@ Components that can be a link take `as`: pass `RouterLink` with `to`, or `Coming
 screen that is not built yet. Colors that a variant does not offer are set with an important
 utility, e.g. `class="bg-on-primary-container!"`.
 
+## List motion
+
+`useListMotion` (from `shared/useListMotion.ts`) animates a list whose items change, like Android's
+`RecyclerView`: removed items fade out, the rest slide to their new places, new ones fade in, and the
+list's height follows. Give the list element `ref` and `relative`, each item a `data-motion-key`,
+and pass the composable something that changes with the items:
+
+```ts
+const list = useTemplateRef('list')
+useListMotion(() => list.value, groups)
+```
+
 ## Where Uangku differs from M3
 
 The design canvas wins for these; everything else follows M3.

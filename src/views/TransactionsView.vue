@@ -16,6 +16,7 @@ import OraList from '@/components/ui/list/OraList.vue'
 import OraOverlay from '@/components/ui/overlay/OraOverlay.vue'
 import OraSearchField from '@/components/ui/search-field/OraSearchField.vue'
 import OraSelectMenu from '@/components/ui/select-menu/OraSelectMenu.vue'
+import { useListMotion } from '@/components/ui/shared/useListMotion'
 import { useOverlay } from '@/components/ui/shared/useOverlay'
 import { newTransactionData } from '@/data/newTransaction'
 import type { LedgerEntry } from '@/data/transactions'
@@ -103,6 +104,9 @@ const groups = computed(() => {
   })
 })
 
+const list = useTemplateRef('list')
+useListMotion(() => list.value, groups)
+
 const emptyText = computed(() => {
   if (!inMonth.value.length) return `No transactions in ${monthName.value} yet.`
   const query = filters.search.trim()
@@ -180,10 +184,15 @@ const emptyText = computed(() => {
           />
 
           <section
+            ref="list"
             aria-label="Transaction list"
-            class="flex min-w-0 flex-[2_1_400px] flex-col gap-4.5 rounded-card bg-surface-container-low px-3.5 pt-5 pb-3.5"
+            class="relative flex min-w-0 flex-[2_1_400px] flex-col gap-4.5 rounded-card bg-surface-container-low px-3.5 pt-5 pb-3.5"
           >
-            <div v-if="day" class="flex flex-wrap items-center justify-between gap-3 px-2.5">
+            <div
+              v-if="day"
+              data-motion-key="day-filter"
+              class="flex flex-wrap items-center justify-between gap-3 px-2.5"
+            >
               <span class="text-body-small text-on-surface-variant">
                 Showing {{ formatDayMonth(day) }} only
               </span>
@@ -192,7 +201,12 @@ const emptyText = computed(() => {
               </OraButton>
             </div>
 
-            <div v-for="group in groups" :key="group.date" class="flex flex-col gap-2">
+            <div
+              v-for="group in groups"
+              :key="group.date"
+              :data-motion-key="group.date"
+              class="flex flex-col gap-2"
+            >
               <div class="flex items-center justify-between gap-3 px-2.5">
                 <h2 class="text-title-medium font-semibold">{{ group.label }}</h2>
                 <span
@@ -211,6 +225,7 @@ const emptyText = computed(() => {
                   v-for="entry in group.entries"
                   :key="entry.id"
                   v-bind="entry"
+                  :data-motion-key="entry.id"
                   :date="formatShortDate(entry.date)"
                   :selected="detail.isOpen && detail.payload?.id === entry.id"
                   @click="detail.open(entry)"
@@ -220,6 +235,7 @@ const emptyText = computed(() => {
 
             <p
               v-if="!groups.length"
+              data-motion-key="empty"
               class="rounded-list-outer bg-surface-container-lowest p-7 text-center text-body-medium text-on-surface-variant"
             >
               {{ emptyText }}
