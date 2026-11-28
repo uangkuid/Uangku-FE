@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import CircularProgressMotion from './CircularProgressMotion.vue'
 
 const props = withDefaults(
   defineProps<{
-    /** Percentage, 0 to 100. */
-    value: number
+    /** Percentage, 0 to 100. Leave it out for an indeterminate indicator. */
+    value?: number
     /** Accessible name. */
     label: string
-    /** Diameter in px. */
+    /** Diameter in px: 40, or 48 when wavy. */
     size?: number
     thickness?: number
     /** Visible space between the active indicator and the track, in px. */
     gap?: number
+    /** The M3 Expressive wave. */
+    wavy?: boolean
     indicatorClass?: string
     trackClass?: string
   }>(),
   {
-    size: 40,
+    value: undefined,
+    size: undefined,
     thickness: 4,
     gap: 4,
     indicatorClass: 'stroke-primary',
@@ -24,13 +28,14 @@ const props = withDefaults(
   },
 )
 
-const center = computed(() => props.size / 2)
-const radius = computed(() => (props.size - props.thickness) / 2)
+const diameter = computed(() => props.size ?? (props.wavy ? 48 : 40))
+const center = computed(() => diameter.value / 2)
+const radius = computed(() => (diameter.value - props.thickness) / 2)
 
 /** Two arcs from 12 o'clock with a gap at both ends: the value, then what is left. */
 const arcs = computed(() => {
   const circumference = 2 * Math.PI * radius.value
-  const percent = Math.min(Math.max(props.value, 0), 100)
+  const percent = Math.min(Math.max(props.value ?? 0, 0), 100)
   const active = (circumference * percent) / 100
 
   /** Dash pattern of the arc visible between two points of the circle. */
@@ -51,21 +56,35 @@ const arcs = computed(() => {
 })
 </script>
 
-<!-- M3 determinate circular progress. The default slot is centered inside the ring. -->
+<!--
+  M3 circular progress, flat or wavy, determinate or indeterminate. The default slot is centered
+  inside the ring.
+-->
 <template>
   <div
     role="progressbar"
     class="relative flex-none"
-    :style="{ width: `${size}px`, height: `${size}px` }"
+    :style="{ width: `${diameter}px`, height: `${diameter}px` }"
     :aria-label="label"
-    aria-valuemin="0"
-    aria-valuemax="100"
+    :aria-valuemin="value === undefined ? undefined : 0"
+    :aria-valuemax="value === undefined ? undefined : 100"
     :aria-valuenow="value"
   >
+    <CircularProgressMotion
+      v-if="wavy || value === undefined"
+      :fraction="value === undefined ? undefined : Math.min(Math.max(value / 100, 0), 1)"
+      :wavy="wavy"
+      :size="diameter"
+      :thickness="thickness"
+      :gap="gap"
+      :indicator-class="indicatorClass"
+      :track-class="trackClass"
+    />
     <svg
-      :width="size"
-      :height="size"
-      :viewBox="`0 0 ${size} ${size}`"
+      v-else
+      :width="diameter"
+      :height="diameter"
+      :viewBox="`0 0 ${diameter} ${diameter}`"
       fill="none"
       :stroke-width="thickness"
       stroke-linecap="round"

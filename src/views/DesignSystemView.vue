@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from 'vue'
+import ControlsShowcase from '@/components/design-system/ControlsShowcase.vue'
+import NavigationShowcase from '@/components/design-system/NavigationShowcase.vue'
+import PickersShowcase from '@/components/design-system/PickersShowcase.vue'
 import IconBell from '@/components/icons/IconBell.vue'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
 import IconEye from '@/components/icons/IconEye.vue'
@@ -107,6 +110,8 @@ const shapes = [
 
 const selected = ref(false)
 const text = ref('')
+const floating = ref('')
+const floatingVariants = ['filled', 'outlined'] as const
 const progress = ref(40)
 const current = ref('Home')
 const period = ref('week')
@@ -297,6 +302,45 @@ const dialog = useOverlay()
         <OraTextField id="ds-disabled" model-value="Disabled" label="Disabled" disabled />
       </div>
       <OraTextArea id="ds-notes" v-model="notes" label="Notes" placeholder="Multi-line text" />
+      <h3 class="text-title-medium">Floating label</h3>
+      <div
+        v-for="variant in floatingVariants"
+        :key="variant"
+        class="grid items-start gap-4 sm:grid-cols-2"
+      >
+        <OraTextField
+          :id="`ds-${variant}`"
+          v-model="floating"
+          :variant="variant"
+          :label="`${variant} email`"
+          placeholder="name@email.com"
+          supporting-text="We never share it."
+        >
+          <template #icon><IconMail /></template>
+        </OraTextField>
+        <OraTextField
+          :id="`ds-${variant}-error`"
+          v-model="floating"
+          :variant="variant"
+          label="Error"
+          error="Email is required"
+          required
+        />
+        <OraTextField
+          :id="`ds-${variant}-readonly`"
+          model-value="Read only"
+          :variant="variant"
+          label="Read only"
+          readonly
+        />
+        <OraTextField
+          :id="`ds-${variant}-disabled`"
+          model-value="Disabled"
+          :variant="variant"
+          label="Disabled"
+          disabled
+        />
+      </div>
     </OraCard>
 
     <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-card">
@@ -344,6 +388,18 @@ const dialog = useOverlay()
           <span class="text-label-large">{{ progress }}%</span>
         </OraCircularProgress>
         <OraButton variant="tonal" @click="progress = (progress + 20) % 120">Advance</OraButton>
+      </div>
+      <h3 class="text-title-medium">Wavy</h3>
+      <OraLinearProgress :value="progress" label="Wavy progress" wavy />
+      <OraLinearProgress :value="progress" label="Thick wavy progress" :thickness="8" wavy />
+      <h3 class="text-title-medium">Indeterminate</h3>
+      <OraLinearProgress label="Indeterminate progress" />
+      <OraLinearProgress label="Indeterminate wavy progress" wavy />
+      <div class="flex flex-wrap items-center gap-4">
+        <OraCircularProgress :value="progress" label="Wavy ring" wavy />
+        <OraCircularProgress label="Indeterminate ring" />
+        <OraCircularProgress label="Indeterminate wavy ring" wavy />
+        <OraCircularProgress label="Large wavy ring" :size="96" :thickness="8" wavy />
       </div>
     </OraCard>
 
@@ -460,5 +516,9 @@ const dialog = useOverlay()
         </OraSheet>
       </div>
     </OraCard>
+
+    <ControlsShowcase />
+    <NavigationShowcase />
+    <PickersShowcase />
   </main>
 </template>
