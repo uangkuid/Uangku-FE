@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
 import OraButton from '@/components/ui/button/OraButton.vue'
 import OraCard from '@/components/ui/card/OraCard.vue'
 import OraLinearProgress from '@/components/ui/linear-progress/OraLinearProgress.vue'
 import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
-import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
 import type { SpendingCategory } from '@/data/home'
 import { formatRupiah } from '@/utils/rupiah'
 
@@ -46,7 +46,7 @@ const BAR_COLORS = ['bg-primary', 'bg-logo-blue', 'bg-tertiary']
       </li>
     </ul>
 
-    <OraButton :as="ComingSoonLink" class="self-start">
+    <OraButton :as="RouterLink" :to="{ name: 'report' }" class="self-start">
       Open report
       <IconChevronRight />
     </OraButton>

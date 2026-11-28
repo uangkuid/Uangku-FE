@@ -1,36 +1,20 @@
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView } from 'vue-router'
+import NewTransactionSheet from '@/components/transaction/NewTransactionSheet.vue'
+import OraOverlay from '@/components/ui/overlay/OraOverlay.vue'
+import { useOverlayStore } from '@/stores/overlays'
+import { useTransactionFormStore } from '@/stores/transactionForm'
 
-const route = useRoute()
-
-/* Held until the sheet is gone, so that no scrollbar returns and nudges it while it slides out. */
-function lockScroll() {
-  document.documentElement.style.overflow = 'hidden'
-}
-
-function unlockScroll() {
-  document.documentElement.style.overflow = ''
-}
+const overlays = useOverlayStore()
+const transactionForm = useTransactionFormStore()
 </script>
 
 <template>
-  <!-- While a route's sheet is open, the page behind it takes no focus or clicks. -->
-  <div :inert="route.meta.sheet ? true : undefined">
+  <!-- While an overlay is open, the page behind it takes no focus or clicks. -->
+  <div :inert="overlays.isOpen || undefined">
     <RouterView />
   </div>
-  <RouterView v-slot="{ Component }" name="sheet">
-    <!--
-      Keeps a sheet on screen while it leaves: it styles that with the `sheet-leaving:` variant.
-      The duration is that of `--motion-default-spatial`.
-    -->
-    <Transition
-      leave-active-class="pointer-events-none"
-      leave-to-class="sheet-leaving"
-      :duration="500"
-      @before-enter="lockScroll"
-      @after-leave="unlockScroll"
-    >
-      <component :is="Component" />
-    </Transition>
-  </RouterView>
+  <OraOverlay>
+    <NewTransactionSheet v-if="transactionForm.isOpen" @close="transactionForm.close()" />
+  </OraOverlay>
 </template>

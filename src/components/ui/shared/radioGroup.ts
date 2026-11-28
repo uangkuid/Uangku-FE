@@ -1,14 +1,14 @@
 const steps: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }
 
 /**
- * Arrow keys of a `role="radiogroup"` made of `role="radio"` buttons: they move to the neighbouring
- * option and select it. Pair it with a roving `tabindex` (see `radioTabindex`).
+ * Arrow keys of a `role="radiogroup"` made of `role="radio"` buttons, or of a tab list: they move
+ * to the neighbouring option and select it. Pair it with a roving `tabindex` (see `radioTabindex`).
  */
 export function onRadioKeydown(event: KeyboardEvent) {
   const step = steps[event.key]
   if (!step) return
   const group = event.currentTarget as HTMLElement
-  const radios = [...group.querySelectorAll<HTMLElement>('[role="radio"]')]
+  const radios = [...group.querySelectorAll<HTMLElement>('[role="radio"], [role="tab"]')]
   const index = radios.indexOf(event.target as HTMLElement)
   if (index < 0) return
   event.preventDefault()

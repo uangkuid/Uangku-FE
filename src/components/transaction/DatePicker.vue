@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, useId, useTemplateRef, watch } from 'vue'
-import IconChevronDown from '@/components/icons/IconChevronDown.vue'
-import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
-import IconChevronRight from '@/components/icons/IconChevronRight.vue'
+import { computed, nextTick, onMounted, ref, useId, useTemplateRef } from 'vue'
 import OraButton from '@/components/ui/button/OraButton.vue'
-import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
-import { useDismissOnOutsidePress } from '@/components/ui/shared/dismissOnOutsidePress'
-import { onRadioKeydown, radioTabindex } from '@/components/ui/shared/radioGroup'
+import OraMonthStrip from '@/components/ui/month-strip/OraMonthStrip.vue'
+import OraSelectMenu from '@/components/ui/select-menu/OraSelectMenu.vue'
 import type { DayActivity } from '@/data/newTransaction'
 import {
   addDays,
@@ -40,8 +36,6 @@ const root = useTemplateRef('root')
 const selected = ref(props.initial)
 /** The month on screen, which may differ from the selected day's. */
 const view = ref(dateParts(props.initial))
-const yearsOpen = ref(false)
-useDismissOnOutsidePress(yearsOpen, useTemplateRef('yearField'))
 
 const gridLabel = computed(() => `${MONTH_NAMES[view.value.month]} ${view.value.year}`)
 
@@ -90,39 +84,6 @@ async function focusIn(selector: string) {
   root.value?.querySelector<HTMLElement>(selector)?.focus()
 }
 
-function toggleYears() {
-  yearsOpen.value = !yearsOpen.value
-  if (yearsOpen.value) focusIn('[role="option"][aria-selected="true"], [role="option"]')
-}
-
-function pickYear(year: number) {
-  show(year, view.value.month)
-  closeYears()
-}
-
-function closeYears() {
-  yearsOpen.value = false
-  focusIn('[aria-haspopup="listbox"]')
-}
-
-function onYearsKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape') {
-    event.stopPropagation()
-    return closeYears()
-  }
-  const step = { ArrowDown: 1, ArrowUp: -1 }[event.key]
-  if (!step) return
-  event.preventDefault()
-  const options = [...(root.value?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])]
-  const index = options.indexOf(event.target as HTMLElement)
-  options[(index + step + options.length) % options.length]?.focus()
-}
-
-function onYearsFocusout(event: FocusEvent) {
-  const next = event.relatedTarget as Node | null
-  if (next && !(event.currentTarget as Node).contains(next)) yearsOpen.value = false
-}
-
 /** Arrow keys walk the days; Page Up and Page Down walk the months. */
 function onDayKeydown(event: KeyboardEvent, date: IsoDate) {
   const days = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[event.key]
@@ -135,28 +96,7 @@ function onDayKeydown(event: KeyboardEvent, date: IsoDate) {
   focusIn(`[data-date="${selected.value}"]`)
 }
 
-const monthRow = useTemplateRef('monthRow')
-
-/** Scrolls the month on screen to the middle of its row, and nothing around the row. */
-function centerMonth(behavior?: ScrollBehavior) {
-  const row = monthRow.value
-  const chip = row?.querySelector<HTMLElement>('[aria-checked="true"]')
-  if (!row || !chip) return
-  const left = chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2
-  row.scrollTo?.({ left, behavior })
-}
-
-// After the render, which is when the new month's chip is the checked one.
-watch(
-  () => view.value.month,
-  () => centerMonth(),
-  { flush: 'post' },
-)
-
-onMounted(() => {
-  root.value?.scrollIntoView?.({ block: 'nearest' })
-  centerMonth('instant')
-})
+onMounted(() => root.value?.scrollIntoView?.({ block: 'nearest' }))
 </script>
 
 <!-- The docked date picker. It reports a date only on "Confirm". -->
@@ -169,79 +109,19 @@ onMounted(() => {
   >
     <div class="flex items-center gap-2 px-1">
       <h3 :id="titleId" class="min-w-0 flex-1 text-title-large font-medium">Select date</h3>
-      <div ref="yearField" class="relative" @focusout="onYearsFocusout">
-        <OraButton
-          variant="tonal"
-          class="gap-1! bg-surface-container-high! pr-2.5! pl-3.5! text-on-surface!"
-          aria-haspopup="listbox"
-          :aria-expanded="yearsOpen"
-          :aria-label="`Year, ${view.year}`"
-          @click="toggleYears"
-        >
-          {{ view.year }}
-          <IconChevronDown :class="yearsOpen && 'rotate-180'" />
-        </OraButton>
-        <div
-          v-if="yearsOpen"
-          role="listbox"
-          aria-label="Year"
-          class="absolute top-11.5 right-0 z-5 flex w-30 flex-col gap-0.5 rounded-corner-lg-inc bg-surface-container-high p-1.5 shadow-elevation-2"
-          @keydown="onYearsKeydown"
-        >
-          <button
-            v-for="year in years"
-            :key="year"
-            type="button"
-            role="option"
-            :aria-selected="year === view.year"
-            class="state-layer focus-ring h-10 flex-none cursor-pointer rounded-field text-label-large font-semibold"
-            :class="
-              year === view.year
-                ? 'bg-secondary-container text-on-secondary-container'
-                : 'text-on-surface'
-            "
-            @click="pickYear(year)"
-          >
-            {{ year }}
-          </button>
-        </div>
-      </div>
+      <OraSelectMenu
+        label="Year"
+        :options="years"
+        :selected="view.year"
+        @select="show($event, view.month)"
+      />
     </div>
 
-    <div class="flex items-center gap-1">
-      <OraIconButton label="Previous month" @click="show(view.year, view.month - 1)">
-        <IconChevronLeft class="size-5.5!" />
-      </OraIconButton>
-      <!-- Scrolls sideways and fades at both ends. The vertical padding leaves room for focus. -->
-      <div
-        ref="monthRow"
-        role="radiogroup"
-        aria-label="Month"
-        class="relative -my-1 flex min-w-0 flex-1 snap-x snap-proximity scroll-smooth gap-1.5 overflow-x-auto [mask-image:linear-gradient(90deg,transparent,black_16px,black_calc(100%-16px),transparent)] px-4 py-1.5 [scrollbar-width:none] motion-reduce:scroll-auto"
-        @keydown="onRadioKeydown"
-      >
-        <button
-          v-for="(name, month) in MONTH_NAMES"
-          :key="name"
-          type="button"
-          role="radio"
-          :aria-checked="month === view.month"
-          :tabindex="radioTabindex([...MONTH_NAMES.keys()], view.month, month)"
-          class="state-layer focus-ring transition-morph h-10 min-w-14 flex-none cursor-pointer snap-center border px-3.5 text-label-large font-semibold active:rounded-corner-sm"
-          :class="
-            month === view.month
-              ? 'rounded-corner-md border-primary bg-primary text-on-primary'
-              : 'rounded-[20px] border-outline-variant text-primary'
-          "
-          @click="show(view.year, month)"
-        >
-          {{ name }}
-        </button>
-      </div>
-      <OraIconButton label="Next month" @click="show(view.year, view.month + 1)">
-        <IconChevronRight class="size-5.5!" />
-      </OraIconButton>
-    </div>
+    <OraMonthStrip
+      :month="view.month"
+      @select="show(view.year, $event)"
+      @step="show(view.year, view.month + $event)"
+    />
 
     <div role="grid" :aria-label="gridLabel" class="flex flex-col gap-0.5">
       <div role="row" class="grid grid-cols-7">

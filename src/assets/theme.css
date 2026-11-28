@@ -88,6 +88,18 @@
    */
   --animate-shape-spin: shape-drift 40s linear infinite, shape-step 8s infinite;
 
+  /* The line that sweeps up and down a QR scanner. Position it with `top`. */
+  --animate-scan: scan 2.4s ease-in-out infinite alternate;
+
+  @keyframes scan {
+    from {
+      top: 16px;
+    }
+    to {
+      top: calc(100% - 19px);
+    }
+  }
+
   @keyframes shape-drift {
     to {
       rotate: 360deg;

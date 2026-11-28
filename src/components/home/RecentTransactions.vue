@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
 import OraButton from '@/components/ui/button/OraButton.vue'
 import OraCard from '@/components/ui/card/OraCard.vue'
@@ -6,7 +7,6 @@ import OraList from '@/components/ui/list/OraList.vue'
 import OraListItem from '@/components/ui/list/OraListItem.vue'
 import OraTag from '@/components/ui/tag/OraTag.vue'
 import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
-import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
 import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
 import type { Transaction } from '@/data/home'
 import { formatSignedRupiah } from '@/utils/rupiah'
@@ -18,14 +18,19 @@ defineProps<{ transactions: Transaction[] }>()
   <OraCard class="gap-3.5 px-2 pt-6 pb-2 sm:px-4 sm:pb-4" aria-labelledby="recent-title">
     <div class="flex flex-wrap items-center justify-between gap-3 px-2">
       <h2 id="recent-title" class="text-title-large font-medium">Recent transactions</h2>
-      <OraButton :as="ComingSoonLink" variant="tonal">
+      <OraButton :as="RouterLink" :to="{ name: 'transactions' }" variant="tonal">
         View all
         <IconChevronRight />
       </OraButton>
     </div>
 
     <OraList>
-      <OraListItem v-for="(transaction, index) in transactions" :key="index" :as="ComingSoonLink">
+      <OraListItem
+        v-for="(transaction, index) in transactions"
+        :key="index"
+        :as="RouterLink"
+        :to="{ name: 'transactions' }"
+      >
         <template #leading>
           <CategoryIcon :category="transaction.category" />
         </template>

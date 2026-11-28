@@ -5,7 +5,7 @@
 /* `dark:` follows the same switch as the design tokens, not the OS setting. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-/* Where a sheet's parts go while it leaves the screen; `App.vue` sets the class. */
+/* Where an overlay's parts go while it leaves the screen; `OraOverlay` sets the class. */
 @custom-variant sheet-leaving (.sheet-leaving &);
 
 @layer base {

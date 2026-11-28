@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import IconEye from '@/components/icons/IconEye.vue'
 import IconChevronRight from '@/components/icons/IconChevronRight.vue'
 import OraButton from '@/components/ui/button/OraButton.vue'
 import OraCard from '@/components/ui/card/OraCard.vue'
 import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
 import OraTag from '@/components/ui/tag/OraTag.vue'
-import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
 import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
 import type { Wallet } from '@/data/home'
+import { walletId } from '@/data/wallets'
 import { formatRupiah } from '@/utils/rupiah'
 
 defineProps<{
@@ -67,9 +68,10 @@ const hidden = ref(false)
     <div
       class="relative mt-auto grid grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))] gap-2"
     >
-      <ComingSoonLink
+      <RouterLink
         v-for="wallet in wallets"
         :key="wallet.name"
+        :to="{ name: 'wallet', params: { id: walletId(wallet.name) } }"
         class="state-layer focus-ring transition-morph flex min-h-30 min-w-0 flex-col justify-between gap-5 rounded-corner-xl bg-primary-container p-4 text-on-primary-container active:rounded-corner-lg sm:p-5"
       >
         <span class="flex min-w-0 items-center gap-2">
@@ -79,9 +81,10 @@ const hidden = ref(false)
         <span class="truncate font-display text-headline-small font-medium tabular-nums">
           {{ hidden ? 'Rp ••••••' : formatRupiah(wallet.balance) }}
         </span>
-      </ComingSoonLink>
+      </RouterLink>
       <OraButton
-        :as="ComingSoonLink"
+        :as="RouterLink"
+        :to="{ name: 'wallets' }"
         class="col-span-full mt-1 justify-self-start bg-on-primary-container! text-on-primary!"
       >
         All {{ walletCount }} wallets

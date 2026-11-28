@@ -15,7 +15,7 @@ defineEmits<{ uncover: [] }>()
 
 <!--
   M3 modal side sheet, detached from the window edges. The caller positions and sizes it and draws
-  the scrim. Slots: `action` (header), default (scrolls) and `footer`.
+  the scrim. Slots: `action` (header), `title-end`, default (scrolls) and `footer`.
 -->
 <template>
   <section
@@ -30,9 +30,12 @@ defineEmits<{ uncover: [] }>()
           <span class="text-[13px] leading-4.5 font-medium text-on-surface-variant">
             {{ overline }}
           </span>
-          <h2 :id="titleId" class="font-display text-headline-medium font-bold tracking-[-0.5px]">
-            {{ title }}
-          </h2>
+          <div class="flex flex-wrap items-center gap-x-3">
+            <h2 :id="titleId" class="font-display text-headline-medium font-bold tracking-[-0.5px]">
+              {{ title }}
+            </h2>
+            <slot name="title-end" />
+          </div>
         </div>
         <slot name="action" />
       </header>

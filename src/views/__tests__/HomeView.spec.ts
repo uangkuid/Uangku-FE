@@ -1,10 +1,14 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount, RouterLinkStub } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
 import HomeView from '../HomeView.vue'
+import { useTransactionFormStore } from '@/stores/transactionForm'
 
 function mountHome() {
-  return mount(HomeView, { global: { stubs: { RouterLink: RouterLinkStub } } })
+  const pinia = createPinia()
+  setActivePinia(pinia)
+  return mount(HomeView, { global: { plugins: [pinia], stubs: { RouterLink: RouterLinkStub } } })
 }
 
 describe('HomeView', () => {
@@ -26,6 +30,16 @@ describe('HomeView', () => {
 
     await wrapper.get('[aria-label="Show balance"]').trigger('click')
     expect(wrapper.text()).toContain('Rp 1.250.000')
+  })
+
+  it('opens the new transaction form from the navigation', async () => {
+    const wrapper = mountHome()
+    const transactionForm = useTransactionFormStore()
+    expect(transactionForm.isOpen).toBe(false)
+
+    await wrapper.get('[aria-label="New transaction"]').trigger('click')
+
+    expect(transactionForm.isOpen).toBe(true)
   })
 
   it('expands and collapses the navigation', async () => {

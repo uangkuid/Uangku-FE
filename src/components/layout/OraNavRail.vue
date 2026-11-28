@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, type Component } from 'vue'
-import { RouterLink, type RouteLocationRaw } from 'vue-router'
+import { inject, type Component } from 'vue'
+import { storeToRefs } from 'pinia'
+import { routeLocationKey, RouterLink, type RouteLocationRaw } from 'vue-router'
 import logoUrl from '@/assets/uangku-logo.svg'
 import IconFamily from '@/components/icons/IconFamily.vue'
 import IconHome from '@/components/icons/IconHome.vue'
@@ -17,6 +18,9 @@ import OraFab from '@/components/ui/fab/OraFab.vue'
 import OraIconButton from '@/components/ui/icon-button/OraIconButton.vue'
 import OraNavRailItem from '@/components/ui/nav-rail-item/OraNavRailItem.vue'
 import ComingSoonLink from '@/components/ui/coming-soon-link/ComingSoonLink.vue'
+import type { NavSection } from '@/router'
+import { useNavRailStore } from '@/stores/navRail'
+import { useTransactionFormStore } from '@/stores/transactionForm'
 
 defineProps<{
   user: { name: string; family: string; initials: string }
@@ -27,21 +31,37 @@ interface NavItem {
   icon: Component
   /** Absent while the screen is not built. */
   to?: RouteLocationRaw
+  /** The screens that mark this item as current. */
+  section?: NavSection
 }
 
 const mainItems: NavItem[] = [
-  { label: 'Home', icon: IconHome, to: { name: 'home' } },
-  { label: 'Transactions', icon: IconTransactions },
-  { label: 'Wallet', icon: IconWallet },
-  { label: 'Report', icon: IconReport },
+  { label: 'Home', icon: IconHome, to: { name: 'home' }, section: 'home' },
+  {
+    label: 'Transactions',
+    icon: IconTransactions,
+    to: { name: 'transactions' },
+    section: 'transactions',
+  },
+  { label: 'Wallet', icon: IconWallet, to: { name: 'wallets' }, section: 'wallets' },
+  { label: 'Report', icon: IconReport, to: { name: 'report' }, section: 'report' },
 ]
 const sharedItems: NavItem[] = [
-  { label: 'Family', icon: IconFamily },
+  { label: 'Family', icon: IconFamily, to: { name: 'family' }, section: 'family' },
   { label: 'My Account', icon: IconUser },
 ]
 
+const transactionForm = useTransactionFormStore()
+/** `useRoute`, but silent where the rail is mounted without a router. */
+const route = inject(routeLocationKey, undefined)
+
+/** A `RouterLink` marks only its own route; a section also covers the screens under it. */
+function currentAttrs(item: NavItem) {
+  return item.section && route?.meta.section === item.section ? { 'aria-current': 'page' } : {}
+}
+
 /** Collapsed (icons over labels) or expanded (96px or 240px wide). */
-const expanded = ref(false)
+const { expanded } = storeToRefs(useNavRailStore())
 </script>
 
 <template>
@@ -69,12 +89,12 @@ const expanded = ref(false)
     </div>
 
     <OraFab
-      :as="RouterLink"
-      :to="{ name: 'transaction-new' }"
       label="New transaction"
+      aria-haspopup="dialog"
       :extended="expanded"
       class="mt-1 mb-4"
       :class="{ 'ml-1 self-start': expanded }"
+      @click="transactionForm.open()"
     >
       <IconPlus />
     </OraFab>
@@ -95,7 +115,7 @@ const expanded = ref(false)
           v-for="item in items"
           :key="item.label"
           :as="item.to ? RouterLink : ComingSoonLink"
-          v-bind="item.to ? { to: item.to } : {}"
+          v-bind="{ ...(item.to ? { to: item.to } : {}), ...currentAttrs(item) }"
           :icon="item.icon"
           :label="item.label"
           :expanded="expanded"

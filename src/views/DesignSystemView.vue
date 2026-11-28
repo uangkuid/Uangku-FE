@@ -30,6 +30,17 @@ import OraTextArea from '@/components/ui/text-area/OraTextArea.vue'
 import OraTextField from '@/components/ui/text-field/OraTextField.vue'
 import CategoryIcon from '@/components/ui/category-icon/CategoryIcon.vue'
 import FamilyIcon from '@/components/ui/family-icon/FamilyIcon.vue'
+import OraBusyStatus from '@/components/ui/busy-status/OraBusyStatus.vue'
+import OraDialog from '@/components/ui/dialog/OraDialog.vue'
+import OraModalSheet from '@/components/ui/sheet/OraModalSheet.vue'
+import OraMonthStrip from '@/components/ui/month-strip/OraMonthStrip.vue'
+import OraOverlay from '@/components/ui/overlay/OraOverlay.vue'
+import OraSearchField from '@/components/ui/search-field/OraSearchField.vue'
+import OraSelectMenu from '@/components/ui/select-menu/OraSelectMenu.vue'
+import { useOverlay } from '@/components/ui/shared/useOverlay'
+import OraSleepingIcon from '@/components/ui/sleeping-icon/OraSleepingIcon.vue'
+import OraSwitch from '@/components/ui/switch/OraSwitch.vue'
+import OraTabs from '@/components/ui/tabs/OraTabs.vue'
 
 const dark = ref(false)
 watch(dark, (isDark) => {
@@ -105,6 +116,16 @@ const periods = [
   { value: 'month', label: 'Month' },
 ]
 const notes = ref('')
+const year = ref(2025)
+const years = [2023, 2024, 2025, 2026]
+const month = ref(0)
+const tab = ref('summary')
+const tabs = [
+  { value: 'summary', label: 'Summary' },
+  { value: 'member', label: 'Member' },
+]
+const sheet = useOverlay()
+const dialog = useOverlay()
 </script>
 
 <template>
@@ -364,6 +385,61 @@ const notes = ref('')
       <OraDivider>OR</OraDivider>
       <OraBanner v-for="tone in tones" :key="tone" :tone="tone">{{ tone }} message</OraBanner>
     </OraCard>
+
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-selection">
+      <h2 id="ds-selection" class="text-title-large font-medium">Switch, tabs, search and menus</h2>
+      <div class="flex flex-wrap items-center gap-4">
+        <OraSwitch v-model="selected" aria-label="Example switch" />
+        <OraSwitch :model-value="true" disabled aria-label="Disabled switch on" />
+        <OraSwitch :model-value="false" disabled aria-label="Disabled switch off" />
+        <OraSelectMenu label="Year" :options="years" :selected="year" @select="year = $event" />
+        <OraSleepingIcon />
+        <OraAvatar size="sm" initials="OR" />
+        <OraAvatar size="md" initials="OR" />
+      </div>
+      <OraTabs v-model="tab" label="Example sections" panel-id="ds-tab-panel" :options="tabs" />
+      <p id="ds-tab-panel" role="tabpanel" class="text-body-medium">The {{ tab }} panel.</p>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <OraSearchField v-model="text" label="Search" placeholder="Outlined search" />
+        <OraSearchField v-model="text" variant="filled" label="Search" placeholder="Search bar" />
+      </div>
+      <OraMonthStrip
+        :month="month"
+        @select="month = $event"
+        @step="month = (month + $event + 12) % 12"
+      />
+      <OraBusyStatus>Working on it…</OraBusyStatus>
+    </OraCard>
+
+    <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-overlay">
+      <h2 id="ds-overlay" class="text-title-large font-medium">Overlays</h2>
+      <div class="flex flex-wrap gap-3">
+        <OraButton aria-haspopup="dialog" @click="sheet.open()">Open side sheet</OraButton>
+        <OraButton variant="tonal" aria-haspopup="dialog" @click="dialog.open()">
+          Open dialog
+        </OraButton>
+      </div>
+    </OraCard>
+
+    <OraOverlay>
+      <OraModalSheet
+        v-if="sheet.isOpen"
+        title="Sheet title"
+        overline="Overline"
+        @close="sheet.close()"
+      >
+        <p class="px-7 text-body-medium">Escape, the scrim, Close and Back all close it.</p>
+      </OraModalSheet>
+    </OraOverlay>
+    <OraOverlay>
+      <OraDialog v-if="dialog.isOpen" title="Dialog title" @close="dialog.close()">
+        The supporting text of the dialog.
+        <template #actions>
+          <OraButton variant="outlined" @click="dialog.close()">Cancel</OraButton>
+          <OraButton @click="dialog.close()">Confirm</OraButton>
+        </template>
+      </OraDialog>
+    </OraOverlay>
 
     <OraCard variant="outlined" class="gap-4 p-5" aria-labelledby="ds-sheet">
       <h2 id="ds-sheet" class="text-title-large font-medium">Side sheet and snackbar</h2>

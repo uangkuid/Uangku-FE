@@ -1,24 +1,16 @@
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 
-import { enableAutoUnmount, mount, RouterLinkStub, type VueWrapper } from '@vue/test-utils'
-import NewTransactionView from '../NewTransactionView.vue'
+import { enableAutoUnmount, mount, type VueWrapper } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
+import { useWalletsStore } from '@/stores/wallets'
+import NewTransactionSheet from '../NewTransactionSheet.vue'
 
-const push = vi.fn<(to: unknown) => void>()
-
-vi.mock('vue-router', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('vue-router')>()),
-  useRouter: () => ({ push }),
-}))
-
-// The view listens on `window`, so each test has to leave nothing behind.
+// The form listens on `window`, so each test has to leave nothing behind.
 enableAutoUnmount(afterEach)
-afterEach(() => push.mockClear())
+beforeEach(() => setActivePinia(createPinia()))
 
 function mountForm() {
-  return mount(NewTransactionView, {
-    attachTo: document.body,
-    global: { stubs: { RouterLink: RouterLinkStub } },
-  })
+  return mount(NewTransactionSheet, { attachTo: document.body })
 }
 
 function button(wrapper: VueWrapper, text: string) {
@@ -36,7 +28,7 @@ async function pressEscape() {
   await Promise.resolve()
 }
 
-describe('NewTransactionView', () => {
+describe('NewTransactionSheet', () => {
   it('formats the amount as Rupiah digits and adds quick amounts', async () => {
     const wrapper = mountForm()
 
@@ -83,6 +75,15 @@ describe('NewTransactionView', () => {
     expect(amount(wrapper).classes()).not.toContain('text-transparent')
   })
 
+  it('leaves out sleeping wallets and picks another default', () => {
+    useWalletsStore().setSleeping('cash', true)
+    const wrapper = mountForm()
+
+    const offered = wrapper.findAll('button[aria-pressed]').map((chip) => chip.text())
+    expect(offered).not.toContain('Cash')
+    expect(button(wrapper, 'Bank Permata').attributes('aria-pressed')).toBe('true')
+  })
+
   it('asks for an amount and a category before saving', async () => {
     const wrapper = mountForm()
     expect(alerts(wrapper)).toEqual([])
@@ -119,7 +120,7 @@ describe('NewTransactionView', () => {
 
     await wrapper.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
     expect(wrapper.find('[role="menu"]').exists()).toBe(false)
-    expect(push).not.toHaveBeenCalled()
+    expect(wrapper.emitted('close')).toBeUndefined()
   })
 
   it('needs two different wallets for a transfer, and no category', async () => {
@@ -185,6 +186,15 @@ describe('NewTransactionView', () => {
     expect(wrapper.get('[data-date="2024-12-29"]').attributes('aria-selected')).toBe('true')
   })
 
+  it('asks to be closed by the Close and Cancel buttons', async () => {
+    const wrapper = mountForm()
+
+    await wrapper.get('[aria-label="Close"]').trigger('click')
+    await button(wrapper, 'Cancel').trigger('click')
+
+    expect(wrapper.emitted('close')).toHaveLength(2)
+  })
+
   it('dismisses the top sheet on a tap outside it', async () => {
     const wrapper = mountForm()
     const scrim = wrapper.get('[data-testid="scrim"]')
@@ -193,11 +203,11 @@ describe('NewTransactionView', () => {
     await scrim.trigger('pointerdown')
     await scrim.trigger('click')
     expect(button(wrapper, 'More').attributes('aria-expanded')).toBe('false')
-    expect(push).not.toHaveBeenCalled()
+    expect(wrapper.emitted('close')).toBeUndefined()
 
     await scrim.trigger('pointerdown')
     await scrim.trigger('click')
-    expect(push).toHaveBeenCalledWith({ name: 'home' })
+    expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
   it('only closes an open menu on the first tap outside', async () => {
@@ -212,7 +222,7 @@ describe('NewTransactionView', () => {
       await scrim.trigger('click')
 
       expect(wrapper.find('[role="menu"], [role="listbox"]').exists()).toBe(false)
-      expect(push).not.toHaveBeenCalled()
+      expect(wrapper.emitted('close')).toBeUndefined()
     }
   })
 
@@ -227,9 +237,9 @@ describe('NewTransactionView', () => {
 
     await pressEscape()
     expect(wrapper.find('[role="grid"]').exists()).toBe(false)
-    expect(push).not.toHaveBeenCalled()
+    expect(wrapper.emitted('close')).toBeUndefined()
 
     await pressEscape()
-    expect(push).toHaveBeenCalledWith({ name: 'home' })
+    expect(wrapper.emitted('close')).toHaveLength(1)
   })
 })

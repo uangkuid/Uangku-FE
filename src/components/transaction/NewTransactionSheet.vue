@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, useId, useTemplateRef, watch } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
 import IconCheck from '@/components/icons/IconCheck.vue'
 import IconClose from '@/components/icons/IconClose.vue'
 import IconLock from '@/components/icons/IconLock.vue'
@@ -19,13 +18,35 @@ import OraSplitButton from '@/components/ui/split-button/OraSplitButton.vue'
 import OraTextArea from '@/components/ui/text-area/OraTextArea.vue'
 import { homeData } from '@/data/home'
 import { newTransactionData, type TransactionType } from '@/data/newTransaction'
+import { useWalletsStore } from '@/stores/wallets'
 import { addDays, formatDayMonth, formatWeekday, type IsoDate } from '@/utils/date'
 import { formatRupiah } from '@/utils/rupiah'
 
 type DateChoice = 'yesterday' | 'today' | 'pick'
 
-const { today, wallets, defaultWallet, defaultTransfer, categories, gridSize, quickAmounts } =
-  newTransactionData
+const {
+  today,
+  wallets: listed,
+  defaultWallet,
+  defaultTransfer,
+  categories,
+  gridSize,
+  quickAmounts,
+} = newTransactionData
+
+const walletStore = useWalletsStore()
+/** The wallets that are awake: the form's own order first, then new or renamed ones. */
+const wallets = computed(() => {
+  const awake = walletStore.list.filter((item) => !item.sleeping)
+  const known = listed.filter((item) => awake.some((other) => other.name === item.name))
+  const added = awake.filter((item) => !listed.some((other) => other.name === item.name))
+  return [...known, ...added.map(({ name, family }) => ({ name, family }))]
+})
+
+/** `name` if that wallet can be used, or else the first one that can. */
+function usable(name: string) {
+  return wallets.value.some((item) => item.name === name) ? name : (wallets.value[0]?.name ?? '')
+}
 
 const types: { value: TransactionType; label: string; glyph: string }[] = [
   { value: 'expense', label: 'Expense', glyph: '−' },
@@ -37,16 +58,18 @@ const saveOptions = [
   { value: 'recurring', label: 'Save as recurring' },
 ]
 
-const router = useRouter()
+/** The form asks to be closed; its draft goes with it. */
+const emit = defineEmits<{ close: [] }>()
+
 const titleId = useId()
 const notesId = useId()
 
 const type = ref<TransactionType>('expense')
 const amount = ref(0)
 const category = ref<string>()
-const wallet = ref(defaultWallet)
-const from = ref(defaultTransfer.from)
-const to = ref(defaultTransfer.to)
+const wallet = ref(usable(defaultWallet))
+const from = ref(usable(defaultTransfer.from))
+const to = ref(usable(defaultTransfer.to))
 const notes = ref('')
 
 const dateChoice = ref<DateChoice>('today')
@@ -139,7 +162,7 @@ function save() {
 /** Closes the sheet on top: the category list first, then the form and its draft. */
 function dismiss() {
   if (categoriesOpen.value) categoriesOpen.value = false
-  else router.push({ name: 'home' })
+  else emit('close')
 }
 
 // Escape backs out one layer at a time. Menus stop the event before it gets here.
@@ -196,10 +219,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
     >
       <template #action>
         <OraIconButton
-          :as="RouterLink"
-          :to="{ name: 'home' }"
           label="Close"
           class="bg-surface-container-high text-on-surface!"
+          @click="emit('close')"
         >
           <IconClose />
         </OraIconButton>
@@ -303,13 +325,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
             <template #icon><IconCheck /></template>
             {{ savedMessage }}
           </OraSnackbar>
-          <OraButton
-            :as="RouterLink"
-            :to="{ name: 'home' }"
-            variant="text"
-            size="m"
-            class="text-error!"
-          >
+          <OraButton variant="text" size="m" class="text-error!" @click="emit('close')">
             Cancel
           </OraButton>
           <OraSplitButton

@@ -39,7 +39,16 @@ go in `shared/`. Prefix a new component with `Ora`.
 | `OraCard`                                 | Cards                            | `variant`                                                   |
 | `OraList`, `OraListItem`                  | Lists (expressive, segmented)    | `as`; slots `leading`, `headline`, `supporting`, `trailing` |
 | `OraSheet`                                | Side sheets (modal, detached)    | `title`, `overline`, `titleId`, `covered`                   |
+| `OraModalSheet`                           | Side sheet with scrim and close  | `title`, `overline`, `closeLabel`, `covered`                |
+| `OraDialog`                               | Basic dialog                     | `title`; slots `hero`, `actions`                            |
+| `OraOverlay`                              | — (Uangku)                       | holds one `v-if` sheet or dialog                            |
 | `OraSnackbar`                             | Snackbar                         | `action`; slot `icon`                                       |
+| `OraSwitch`                               | Switch (with icons)              | `v-model`, `disabled`                                       |
+| `OraTabs`                                 | Primary tabs                     | `options`, `v-model`, `label`, `panelId`                    |
+| `OraSearchField`                          | Search                           | `v-model`, `label`, `variant`                               |
+| `OraSelectMenu`                           | Menu on a button                 | `label`, `options`, `selected`, `size` s/m                  |
+| `OraMonthStrip`                           | — (Uangku)                       | `month`, `disablePrevious`, `disableNext`                   |
+| `OraBusyStatus`                           | Loading indicator (simplified)   | text in the slot                                            |
 | `OraNavRailItem`                          | Navigation rail                  | `label`, `icon`, `expanded`                                 |
 | `OraLinearProgress`                       | Linear progress                  | `value`, `label`, `thickness`                               |
 | `OraCircularProgress`                     | Circular progress                | `value`, `label`, `size`, `thickness`                       |
@@ -47,7 +56,25 @@ go in `shared/`. Prefix a new component with `Ora`.
 | `OraDivider`                              | Divider                          | `vertical`; text in the slot                                |
 | `OraTag`                                  | — (Uangku)                       | `color`, `size`                                             |
 | `OraBanner`                               | — (Uangku)                       | `tone`                                                      |
-| `OraAvatar`, `CategoryIcon`, `FamilyIcon` | — (Uangku)                       |                                                             |
+| `OraAvatar`                               | — (Uangku)                       | `initials`, `size` xs/sm/md                                 |
+| `CategoryIcon`, `FamilyIcon`              | — (Uangku)                       | `category`; `labelled`                                      |
+| `OraSleepingIcon`                         | — (Uangku)                       |                                                             |
+
+## Overlays
+
+Side sheets and dialogs are overlays, not routes. A screen keeps one `useOverlay()` (from
+`shared/useOverlay.ts`) per overlay and puts the component in an `OraOverlay`:
+
+```vue
+<OraOverlay>
+  <WalletEditSheet v-if="editing.isOpen" @close="editing.close()" />
+</OraOverlay>
+```
+
+`OraOverlay` teleports to `body`, locks page scroll and runs the exit animation. While any overlay
+is open, `App.vue` makes the page inert and Back closes the top one. A component placed in
+`OraOverlay` must have a single root element, or the transition cannot animate it: nest a dialog's
+`OraOverlay` inside the sheet, not beside it.
 
 Components that can be a link take `as`: pass `RouterLink` with `to`, or `ComingSoonLink` for a
 screen that is not built yet. Colors that a variant does not offer are set with an important
@@ -73,5 +100,10 @@ touch target), icon buttons are 40px, and the split button's menu half turns ful
 menu is open. The canvas wins for the filter chip (a pill that squares off when selected, with no
 leading check) and the multi-line field (label inside a 24px filled container).
 
+The other screens follow the same rule: M3 button and icon button sizes replace the canvas's odd
+heights (36px to 48px buttons become 40px with a 48px touch target), the filter badge keeps the
+canvas's primary color, side sheets share one 480px width and a 32% scrim, and the sleep and wake
+dialogs use the dialog component's own motion.
+
 Not built yet, because no screen needs them: wavy progress, indeterminate progress, floating-label
-text fields, dialogs, standalone menus and the other M3 components.
+text fields and the other M3 components.
